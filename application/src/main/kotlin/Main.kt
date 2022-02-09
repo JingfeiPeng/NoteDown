@@ -9,6 +9,9 @@ import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import data.NoteEntry
+import data.NoteFile
+import data.NoteFolder
 import presentation.DocumentEditingArea
 import presentation.DocumentSelectionArea
 import presentation.MarkdownRendererArea
@@ -31,8 +34,8 @@ fun App() {
 @Composable
 fun MainArea() {
     Row(Modifier.fillMaxSize()) {
-        Box(modifier = Modifier.fillMaxWidth(0.3f)) {
-            DocumentSelectionArea()
+        Box(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
+            DocumentSelectionArea(NoteFolder("dir1", listOf(NoteFile("file0"), NoteFolder("dir2", listOf(NoteFile("file1"), NoteFile("file2"))), NoteFile("file3"))))
         }
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea()

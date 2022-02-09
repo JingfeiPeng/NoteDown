@@ -1,16 +1,23 @@
 package presentation
 
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import data.NoteEntry
+import data.NoteFile
+import data.NoteFolder
 
 @Composable
-fun DocumentSelectionArea() {
-    var text by remember { mutableStateOf("Select Document Area") }
-
-    Button(onClick = {
-        text = "Select Document Area here"
-    }) {
-        Text(text)
+fun DocumentSelectionArea(tree: NoteEntry, prefix: String = "") {
+    when (tree) {
+        is NoteFile -> Text("${prefix}-> ${tree.name}")
+        is NoteFolder -> {
+            Text("${prefix}-> ${tree.name}")
+            tree.children.forEach {
+                DocumentSelectionArea(it, prefix = "$prefix    ")
+            }
+        }
     }
 }
