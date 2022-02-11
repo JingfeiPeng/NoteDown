@@ -34,18 +34,23 @@ fun App() {
 fun MainArea() {
     Row(Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
-            Column {
-                DocumentSelectionArea(
+            DocumentSelectionArea(
+                listOf(
                     NoteFolder(
                         "dir1",
                         listOf(
                             NoteFile("file0"),
-                            NoteFolder("dir2", listOf(NoteFile("file1"), NoteFile("file2"))),
+                            NoteFile("file1")
+                        )
+                    ), NoteFolder(
+                        "dir2",
+                        listOf(
+                            NoteFile("file2"),
                             NoteFile("file3")
                         )
                     )
                 )
-            }
+            )
         }
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea()
@@ -55,7 +60,7 @@ fun MainArea() {
 }
 
 @Composable
-fun FrameWindowScope.MenuItems()  {
+fun FrameWindowScope.MenuItems() {
     MenuBar {
         Menu("File") {}
         Menu("Notes Calendar View") {}
