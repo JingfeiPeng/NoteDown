@@ -1,0 +1,1 @@
+Classess for managing the databases goes here, ex. providing methods for CRUD operations
