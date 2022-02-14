@@ -12,21 +12,13 @@ fun saveText(text: String) {
 }
 
 fun loadText(textState: MutableState<TextFieldValue>) {
-     textState.value = TextFieldValue(File("src/save.txt").readText())
+    textState.value = TextFieldValue(File("src/save.txt").readText())
 }
 
 @Composable
 fun DocumentSelectionArea(textState: MutableState<TextFieldValue>) {
     var text by remember { mutableStateOf("Select Document Area") }
     Column {
-        Button(onClick = { saveText(textState.value.text.toString()) }) {
-            Text("Save")
-        }
-
-        Button(onClick = {  loadText(textState) }) {
-            Text("Load")
-        }
-
         Button(onClick = {
             text = "Select Document Area here"
         }) {
