@@ -15,11 +15,15 @@ import presentation.MarkdownRendererArea
 import presentation.TextCustomizationMenu
 
 
-import androidx.compose.ui.Modifier
+//import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.TextField
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.TextFieldValue
 import java.io.File
 
@@ -38,30 +42,16 @@ fun App() {
 }
 
 @Composable
-fun TextFieldDemo() {
-    Column(Modifier.padding(16.dp)) {
-        val textState = remember { mutableStateOf(TextFieldValue()) }
-        TextField(
-            value = textState.value,
-            onValueChange = { textState.value = it }
-        )
-        Text("The textfield has this text: " + textState.value.text)
-        MaterialTheme {
-            Button(onClick = {
-                File("src/save.txt").writeText(textState.value.text.toString())
-            }) {
-                Text("Save")
-            }
-        }
 fun MainArea() {
     Row(Modifier.fillMaxSize()) {
+        val textState = remember { mutableStateOf(TextFieldValue()) }
         Box(modifier = Modifier.fillMaxWidth(0.3f)) {
-            DocumentSelectionArea()
+            DocumentSelectionArea(textState)
         }
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
-            DocumentEditingArea()
+            DocumentEditingArea(textState)
         }
-        MarkdownRendererArea()
+        MarkdownRendererArea(textState)
     }
 }
 
@@ -76,8 +66,6 @@ fun FrameWindowScope.MenuItems()  {
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
-        TextFieldDemo()
-//        App()
         MenuItems()
         App()
     }
