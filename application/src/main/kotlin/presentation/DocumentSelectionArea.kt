@@ -16,13 +16,11 @@ fun loadText(textState: MutableState<TextFieldValue>) {
 }
 
 @Composable
-fun DocumentSelectionArea(textState: MutableState<TextFieldValue>) {
+fun DocumentSelectionArea() {
     var text by remember { mutableStateOf("Select Document Area") }
-    Column {
         Button(onClick = {
             text = "Select Document Area here"
         }) {
             Text(text)
         }
-    }
 }

@@ -52,7 +52,7 @@ fun MainArea(textState: MutableState<TextFieldValue>) {
     Row(Modifier.fillMaxSize()) {
 
         Box(modifier = Modifier.fillMaxWidth(0.3f)) {
-            DocumentSelectionArea(textState)
+            DocumentSelectionArea()
         }
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea(textState)
