@@ -14,8 +14,8 @@ import presentation.DocumentSelectionArea
 import presentation.MarkdownRendererArea
 import presentation.TextCustomizationMenu
 
-import presentation.saveText
-import presentation.loadText
+import persistence.saveText
+import persistence.loadText
 
 
 //import androidx.compose.ui.Modifier
