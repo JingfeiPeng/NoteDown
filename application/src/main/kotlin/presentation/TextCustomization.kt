@@ -1,8 +1,12 @@
 package presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -11,6 +15,10 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+
+
 
 
 // button text placement went out of the button
@@ -26,6 +34,44 @@ fun CustomizationButton(onClick: () -> Unit, content: @Composable() () -> Unit) 
         content()
     }
 }
+
+@Composable
+fun codeBlockButton() {
+    Divider(
+        color = Color.Gray,
+        modifier = Modifier
+            .fillMaxHeight(0.8f)
+            .width(1.dp)
+    )
+    // need a space for margin
+    Text(" ")
+    var expanded by remember { mutableStateOf(false) }
+
+    val items = listOf("JavaScript", "Python", "Java")
+    Box() {
+        Text(
+            " Insert Code \n Snippet",
+            modifier = Modifier.clickable(onClick = {expanded = true}),
+            style = MaterialTheme.typography.body2,
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            items.forEachIndexed { index, s ->
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    // Send action to change text
+                    System.out.println(items.get(index))
+                }) {
+                    Text(text = s)
+                }
+            }
+        }
+    }
+}
+
+
 
 @Composable
 fun TextCustomizationMenu() {
@@ -48,6 +94,7 @@ fun TextCustomizationMenu() {
                 }) {
                     Text( text = "S", style = TextStyle(textDecoration = TextDecoration.LineThrough))
                 }
+                codeBlockButton()
             }
         },
     )
