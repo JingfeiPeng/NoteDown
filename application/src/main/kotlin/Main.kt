@@ -16,22 +16,41 @@ import presentation.DocumentSelectionArea
 import presentation.MarkdownRendererArea
 import presentation.TextCustomizationMenu
 
+import persistence.saveText
+import persistence.loadText
+
+
+//import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.ui.unit.dp
+import androidx.compose.material.TextField
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.text.input.TextFieldValue
+import java.awt.MenuItem
+import java.io.File
+import java.lang.System.exit
+
 
 @Composable
 @Preview
-fun App() {
+fun App(textState: MutableState<TextFieldValue>) {
     MaterialTheme {
         BoxWithConstraints {
             Column {
                 TextCustomizationMenu()
-                MainArea()
+                MainArea(textState)
             }
         }
     }
 }
 
 @Composable
-fun MainArea() {
+fun MainArea(textState: MutableState<TextFieldValue>) {
     Row(Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
             DocumentSelectionArea(
@@ -53,24 +72,29 @@ fun MainArea() {
             )
         }
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
-            DocumentEditingArea()
+            DocumentEditingArea(textState)
         }
-        MarkdownRendererArea()
+        MarkdownRendererArea(textState)
     }
 }
 
 @Composable
-fun FrameWindowScope.MenuItems() {
+fun FrameWindowScope.MenuItems(textState: MutableState<TextFieldValue>)  {
     MenuBar {
-        Menu("File") {}
+        Menu("File") {
+            Item("Save", onClick = { saveText(textState.value.text.toString()) })
+            Item("Load", onClick = { loadText(textState) })
+        }
         Menu("Notes Calendar View") {}
         Menu("Help") {}
     }
 }
 
+
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
-        MenuItems()
-        App()
+        val textState = remember { mutableStateOf(TextFieldValue()) }
+        MenuItems(textState)
+        App(textState)
     }
 }
