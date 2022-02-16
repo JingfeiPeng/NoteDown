@@ -9,81 +9,72 @@ import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import data.NoteFile
-import data.NoteFolder
 import presentation.DocumentEditingArea
 import presentation.DocumentSelectionArea
 import presentation.MarkdownRendererArea
 import presentation.TextCustomizationMenu
-
-import persistence.saveText
-import persistence.loadText
-
-
-//import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.ui.unit.dp
-import androidx.compose.material.TextField
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+
+
+import persistence.FileIO
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.TextFieldValue
-import java.awt.MenuItem
-import java.io.File
-import java.lang.System.exit
-
+import data.NoteFile
+import data.NoteFolder
 
 @Composable
 @Preview
-fun App(textState: MutableState<TextFieldValue>) {
+fun App(
+    textState: MutableState<TextFieldValue>,
+    selectedFolder: MutableState<NoteFolder?>,
+    selectedFile: MutableState<NoteFile?>,
+) {
     MaterialTheme {
         BoxWithConstraints {
             Column {
                 TextCustomizationMenu()
-                MainArea(textState)
+                MainArea(textState, selectedFolder, selectedFile)
             }
         }
     }
 }
 
 @Composable
-fun MainArea(textState: MutableState<TextFieldValue>) {
+fun MainArea(
+    textState: MutableState<TextFieldValue>,
+    selectedFolder: MutableState<NoteFolder?>,
+    selectedFile: MutableState<NoteFile?>,
+) {
     Row(Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
             DocumentSelectionArea(
-                listOf(
-                    NoteFolder(
-                        "dir1",
-                        listOf(
-                            NoteFile("file0"),
-                            NoteFile("file1")
-                        )
-                    ), NoteFolder(
-                        "dir2",
-                        listOf(
-                            NoteFile("file2"),
-                            NoteFile("file3")
-                        )
-                    )
-                )
+                selectedFolder,
+                selectedFile,
+                textState,
             )
         }
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
-            DocumentEditingArea(textState)
+            DocumentEditingArea(textState, selectedFile)
         }
         MarkdownRendererArea(textState)
     }
 }
 
 @Composable
-fun FrameWindowScope.MenuItems(textState: MutableState<TextFieldValue>)  {
+fun FrameWindowScope.MenuItems(
+    textState: MutableState<TextFieldValue>,
+    file: NoteFile?,
+)  {
     MenuBar {
         Menu("File") {
-            Item("Save", onClick = { saveText(textState.value.text.toString()) })
-            Item("Load", onClick = { loadText(textState) })
+            Item("Save", onClick = {
+                if (file != null) {
+                    FileIO.saveText(textState.value.text.toString(), file)
+                }
+            })
         }
         Menu("Notes Calendar View") {}
         Menu("Help") {}
@@ -93,8 +84,12 @@ fun FrameWindowScope.MenuItems(textState: MutableState<TextFieldValue>)  {
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
+        // To-do: shouldn't pass the props around and down the children.
+        // figure out a way to use redux like store
         val textState = remember { mutableStateOf(TextFieldValue()) }
-        MenuItems(textState)
-        App(textState)
+        val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
+        val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
+        MenuItems(textState, selectedFile.value)
+        App(textState, selectedFolder, selectedFile)
     }
 }
