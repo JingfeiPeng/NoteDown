@@ -62,6 +62,15 @@ fun DocumentSelectionArea(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.weight(1.0f))
+
+                Button(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    onClick = {
+                        println("New Section")
+                    }) {
+                    Text("+ Section")
+                }
             }
         }
 
@@ -91,6 +100,16 @@ fun DocumentSelectionArea(
                                 Text(it.name)
                             }
                         }
+                    }
+
+
+                    Spacer(modifier = Modifier.weight(1.0f))
+
+                    Button(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                        onClick = {
+                            println("New File")
+                        }) {
+                        Text("+ File")
                     }
                 }
             }
