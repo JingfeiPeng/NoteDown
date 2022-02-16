@@ -2,23 +2,42 @@ package presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import data.NoteFile
 import data.NoteFolder
+import persistence.FileIO
+
+fun updateSelectedFile(
+    selectedFile: MutableState<NoteFile?>,
+    textState: MutableState<TextFieldValue>,
+    file: NoteFile,
+) {
+    selectedFile.value = file
+    FileIO.loadFile(textState, file)
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DocumentSelectionArea(folders: List<NoteFolder>) {
-    val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
-    val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
+fun DocumentSelectionArea(
+    selectedFolder: MutableState<NoteFolder?>,
+    selectedFile: MutableState<NoteFile?>,
+    textState: MutableState<TextFieldValue>,
+) {
+    val folders = FileIO.readNotesFolder();
+
+    // initialize selected folder and foles
+    if (folders.size > 0 && selectedFolder.value == null) {
+        selectedFolder.value = folders[0]
+        if (folders[0].children.size > 0) {
+            updateSelectedFile(selectedFile, textState, folders[0].children[0])
+        }
+    }
 
     val selectedColour = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray)
     val unselectedColour = ButtonDefaults.buttonColors(backgroundColor = Color.White)
@@ -35,7 +54,7 @@ fun DocumentSelectionArea(folders: List<NoteFolder>) {
                             if (selectedFolder.value != it) {
                                 selectedFolder.value = it
                                 it.children.firstOrNull()?.let { file ->
-                                    selectedFile.value = file
+                                    updateSelectedFile(selectedFile, textState, file)
                                 }
                             }
                         }, colors = colour) {
@@ -65,7 +84,7 @@ fun DocumentSelectionArea(folders: List<NoteFolder>) {
                                 modifier = Modifier.fillMaxWidth().height(40.dp),
                                 shape = RectangleShape,
                                 onClick = {
-                                    selectedFile.value = it
+                                    updateSelectedFile(selectedFile, textState, it)
                                 },
                                 colors = colour,
                             ) {
