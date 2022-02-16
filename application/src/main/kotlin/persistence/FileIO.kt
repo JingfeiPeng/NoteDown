@@ -9,12 +9,10 @@ import java.io.File
 
 class FileIO {
     companion object {
-        private const val notesFolder = "src/notes"
+        private val notesFolder = System.getProperty("user.home")+"/NotesTaker"
 
         fun saveText(text: String, file: NoteFile?) {
-            if (file != null) {
-                file.file.writeText(text)
-            }
+            file?.let { file.file.writeText(text) }
         }
 
         fun loadFile(textState: MutableState<TextFieldValue>, file: NoteFile) {
@@ -22,6 +20,10 @@ class FileIO {
         }
 
         fun readNotesFolder() : ArrayList<NoteFolder> {
+            val notesDirectory = File(notesFolder)
+            if (!File(notesFolder).exists()) {
+                notesDirectory.mkdir()
+            }
 
             val foldersAndFiles = ArrayList<NoteFolder>()
 
