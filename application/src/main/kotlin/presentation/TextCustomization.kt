@@ -3,22 +3,21 @@ package presentation
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-
-
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.getSelectedText
+import androidx.compose.ui.text.input.getTextAfterSelection
+import androidx.compose.ui.text.input.getTextBeforeSelection
+import business.TextCustomization
 
 
 // button text placement went out of the button
@@ -27,7 +26,7 @@ fun CustomizationButton(onClick: () -> Unit, content: @Composable() () -> Unit) 
     val buttonColors = ButtonDefaults.buttonColors(contentColor = Color.White)
     val buttonWidth = 40.dp
     Button(
-        onClick = {},
+        onClick = onClick,
         colors = buttonColors,
         modifier = Modifier.width(buttonWidth),
     ) {
@@ -36,7 +35,7 @@ fun CustomizationButton(onClick: () -> Unit, content: @Composable() () -> Unit) 
 }
 
 @Composable
-fun codeBlockButton() {
+fun codeBlockButton(textState: MutableState<TextFieldValue>) {
     Divider(
         color = Color.Gray,
         modifier = Modifier
@@ -47,7 +46,7 @@ fun codeBlockButton() {
     Text(" ")
     var expanded by remember { mutableStateOf(false) }
 
-    val items = listOf("JavaScript", "Python", "Java")
+    val items = listOf("General","JavaScript", "Python", "Java")
     Box() {
         Text(
             " Insert Code \n Snippet",
@@ -62,7 +61,27 @@ fun codeBlockButton() {
                 DropdownMenuItem(onClick = {
                     expanded = false
                     // Send action to change text
-                    System.out.println(items.get(index))
+                    when (items[index]) {
+                        items[0] -> {
+                            TextCustomization.appendAroundSelected(textState, "\n```\n")
+                        }
+                        items[1] -> {
+                            TextCustomization.appendAroundSelected(
+                                textState, "\n```javascript\n", "\n```\n"
+                            )
+                        }
+                        items[2] -> {
+                            TextCustomization.appendAroundSelected(
+                                textState, "\n```python\n", "\n```\n"
+                            )
+                        }
+                        items[3] -> {
+                            TextCustomization.appendAroundSelected(
+                                textState, "\n```java\n", "\n```\n"
+                            )
+                        }
+
+                    }
                 }) {
                     Text(text = s)
                 }
@@ -74,7 +93,7 @@ fun codeBlockButton() {
 
 
 @Composable
-fun TextCustomizationMenu() {
+fun TextCustomizationMenu(textState: MutableState<TextFieldValue>) {
     TopAppBar(
         title = {
             Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
@@ -84,17 +103,22 @@ fun TextCustomizationMenu() {
                         style = MaterialTheme.typography.body1
                     )
                 }
-                CustomizationButton(onClick = {}) { Text("B", fontWeight=FontWeight.Bold) }
-                CustomizationButton(onClick = {}) { Text("I", fontStyle = FontStyle.Italic) }
+                CustomizationButton(onClick = {
+                    TextCustomization.appendAroundSelected(textState, "**")
+                }) { Text("B", fontWeight=FontWeight.Bold) }
+                CustomizationButton(onClick = {
+                    TextCustomization.appendAroundSelected(textState, "*")
+                }) { Text("I", fontStyle = FontStyle.Italic) }
                 CustomizationButton(onClick = {
                     // underline text with <ins> </ins>
+                    TextCustomization.appendAroundSelected(textState, "<ins>", "</ins>")
                 }) { Text("U", style = TextStyle(textDecoration = TextDecoration.Underline)) }
                 CustomizationButton(onClick = {
-                    // strikethrough with ~~TEXT~~
+                    TextCustomization.appendAroundSelected(textState, "~~")
                 }) {
                     Text( text = "S", style = TextStyle(textDecoration = TextDecoration.LineThrough))
                 }
-                codeBlockButton()
+                codeBlockButton(textState)
             }
         },
     )
