@@ -14,10 +14,12 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    mavenCentral()
 }
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("org.mockito:mockito-core:3.+")
     implementation(compose.desktop.currentOs)
 }
 
