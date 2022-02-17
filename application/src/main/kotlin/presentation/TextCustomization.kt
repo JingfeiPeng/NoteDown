@@ -46,7 +46,7 @@ fun codeBlockButton(textState: MutableState<TextFieldValue>) {
     Text(" ")
     var expanded by remember { mutableStateOf(false) }
 
-    val items = listOf("General","JavaScript", "Python", "Java")
+    val items = listOf("General","JavaScript", "Python", "Java", "Kotlin")
     Box() {
         Text(
             " Insert Code \n Snippet",
@@ -80,7 +80,11 @@ fun codeBlockButton(textState: MutableState<TextFieldValue>) {
                                 textState, "\n```java\n", "\n```\n"
                             )
                         }
-
+                        items[4] -> {
+                            TextCustomization.appendAroundSelected(
+                                textState, "\n```kotlin\n", "\n```\n"
+                            )
+                        }
                     }
                 }) {
                     Text(text = s)
