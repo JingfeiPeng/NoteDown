@@ -33,6 +33,22 @@ fun updateSelectedFile(
     FileIO.loadFile(textState, file)
 }
 
+fun createFile(
+    selectedFolder: MutableState<NoteFolder?>,
+    selectedFile: MutableState<NoteFile?>,
+    textState: MutableState<TextFieldValue>,
+    dir: NoteFolder,
+    name: String,
+) {
+    val (folder, file) = FileIO.makeFile(dir, name)
+    if (folder != null) {
+        selectedFolder.value = folder
+    }
+    if (file != null) {
+        updateSelectedFile(selectedFile, textState, file)
+    }
+}
+
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun DocumentSelectionArea(
@@ -87,7 +103,7 @@ fun DocumentSelectionArea(
                     TextField(
                         modifier = Modifier.focusRequester(newFolderFocusRequester).onKeyEvent { keyEvent ->
                             if (keyEvent.key.keyCode == Key.Enter.keyCode) {
-                                println(it)
+                                selectedFolder.value = FileIO.makeFolder(it)
                                 newFolderText = null
                             }
                             true
@@ -143,8 +159,9 @@ fun DocumentSelectionArea(
                     newFileText?.let {
                         TextField(
                             modifier = Modifier.focusRequester(newFileFocusRequester).onKeyEvent { keyEvent ->
-                                if (keyEvent.key.keyCode == Key.Enter.keyCode) {
-                                    println(it)
+                                val dir = selectedFolder.value
+                                if (keyEvent.key.keyCode == Key.Enter.keyCode && dir != null) {
+                                    createFile(selectedFolder, selectedFile, textState, dir, it)
                                     newFileText = null
                                 }
                                 true
@@ -180,7 +197,7 @@ fun DocumentSelectionArea(
 
     DisposableEffect(focusFile) {
         if (focusFile) {
-            newFolderFocusRequester.requestFocus()
+            newFileFocusRequester.requestFocus()
         }
         onDispose { }
     }
