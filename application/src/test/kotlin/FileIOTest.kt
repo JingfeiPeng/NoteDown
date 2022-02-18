@@ -45,6 +45,9 @@ internal class FileIOTest {
     fun testReadNotesFolder() {
         // arrange
         val basePath =  System.getProperty("user.home")+"/NotesTaker"
+        if (!File(basePath).exists()) {
+            File(basePath).mkdir()
+        }
         File(basePath).mkdir()
         val testingFolder = File("$basePath/IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiud")
         testingFolder.mkdir()
