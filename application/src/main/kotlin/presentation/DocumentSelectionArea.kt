@@ -1,17 +1,28 @@
 package presentation
 
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import data.NoteFile
 import data.NoteFolder
 import persistence.FileIO
+import java.awt.event.KeyEvent
 
 fun updateSelectedFile(
     selectedFile: MutableState<NoteFile?>,
@@ -22,7 +33,7 @@ fun updateSelectedFile(
     FileIO.loadFile(textState, file)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun DocumentSelectionArea(
     selectedFolder: MutableState<NoteFolder?>,
@@ -30,6 +41,15 @@ fun DocumentSelectionArea(
     textState: MutableState<TextFieldValue>,
 ) {
     val folders = FileIO.readNotesFolder();
+
+    val newFolderFocusRequester = remember { FocusRequester() }
+    val newFileFocusRequester = remember { FocusRequester() }
+
+    var focusFolder by remember { mutableStateOf(false) }
+    var focusFile by remember { mutableStateOf(false) }
+
+    var newFolderText by remember { mutableStateOf<String?>(null) }
+    var newFileText by remember { mutableStateOf<String?>(null) }
 
     // initialize selected folder and foles
     if (folders.size > 0 && selectedFolder.value == null) {
@@ -63,11 +83,29 @@ fun DocumentSelectionArea(
                     }
                 }
 
+                newFolderText?.let {
+                    TextField(
+                        modifier = Modifier.focusRequester(newFolderFocusRequester).onKeyEvent { keyEvent ->
+                            if (keyEvent.key.keyCode == Key.Enter.keyCode) {
+                                println(it)
+                                newFolderText = null
+                            }
+                            true
+                        },
+                        value = it,
+                        singleLine = true,
+                        onValueChange = {
+                            newFolderText = it
+                        }
+                    )
+                }
+
                 Spacer(modifier = Modifier.weight(1.0f))
 
-                Button(modifier = Modifier.fillMaxWidth().padding(8.dp),
+                Button(modifier = Modifier.fillMaxWidth().padding(7.dp),
                     onClick = {
-                        println("New Section")
+                        newFolderText = ""
+                        focusFolder = true
                     }) {
                     Text("+ Section")
                 }
@@ -102,17 +140,48 @@ fun DocumentSelectionArea(
                         }
                     }
 
+                    newFileText?.let {
+                        TextField(
+                            modifier = Modifier.focusRequester(newFileFocusRequester).onKeyEvent { keyEvent ->
+                                if (keyEvent.key.keyCode == Key.Enter.keyCode) {
+                                    println(it)
+                                    newFileText = null
+                                }
+                                true
+                            },
+                            value = it,
+                            singleLine = true,
+                            onValueChange = {
+                                newFileText = it
+                            }
+                        )
+                    }
 
                     Spacer(modifier = Modifier.weight(1.0f))
 
                     Button(modifier = Modifier.fillMaxWidth().padding(8.dp),
                         onClick = {
-                            println("New File")
+                            newFileText = ""
+                            focusFile = true
                         }) {
                         Text("+ File")
                     }
                 }
             }
         }
+    }
+
+    DisposableEffect(focusFolder) {
+        if (focusFolder) {
+            newFolderFocusRequester.requestFocus()
+        }
+        onDispose { }
+    }
+
+    DisposableEffect(focusFile) {
+        if (focusFile) {
+            newFolderFocusRequester.requestFocus()
+        }
+        onDispose { }
     }
 }
