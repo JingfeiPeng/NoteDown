@@ -4,12 +4,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
+import presentation.updateSelectedFile
 import java.io.File
 
 
 class FileIO {
     companion object {
-        private val notesFolder = System.getProperty("user.home")+"/NotesTaker"
+        private val notesFolder = System.getProperty("user.home") + "/NotesTaker"
 
         fun saveText(text: String, file: NoteFile?) {
             file?.let { file.file.writeText(text) }
@@ -19,7 +20,32 @@ class FileIO {
             textState.value = TextFieldValue(file.file.readText())
         }
 
-        fun readNotesFolder() : ArrayList<NoteFolder> {
+        fun makeFolder(name: String): NoteFolder? {
+            val notesDirectory = File(notesFolder)
+            val newFolder = File(notesDirectory, name)
+
+            if (!newFolder.exists()) {
+                newFolder.mkdirs()
+            }
+
+            return readNotesFolder().find { it.name == name }
+        }
+
+        fun makeFile(dir: NoteFolder, name: String): Pair<NoteFolder?, NoteFile?> {
+            val newFile = File(dir.file, name)
+            if (!newFile.exists()) {
+                newFile.createNewFile()
+            }
+
+            val noteFolder = readNotesFolder().find { it.name == dir.name }
+            val noteFile = noteFolder?.children?.find {
+                it.name == name
+            }
+
+            return Pair(noteFolder, noteFile)
+        }
+
+        fun readNotesFolder(): ArrayList<NoteFolder> {
             val notesDirectory = File(notesFolder)
             if (!File(notesFolder).exists()) {
                 notesDirectory.mkdir()
