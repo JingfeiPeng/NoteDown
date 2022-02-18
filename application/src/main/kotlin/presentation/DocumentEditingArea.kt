@@ -7,11 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
 import data.NoteFile
 import persistence.FileIO
-import java.awt.TextArea
-import java.awt.TextField
 
 @Composable
 fun DocumentEditingArea(

@@ -35,7 +35,7 @@ fun App(
     MaterialTheme {
         BoxWithConstraints {
             Column {
-                TextCustomizationMenu()
+                TextCustomizationMenu(textState)
                 MainArea(textState, selectedFolder, selectedFile)
             }
         }
