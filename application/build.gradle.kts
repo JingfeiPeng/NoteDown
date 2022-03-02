@@ -23,6 +23,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.+")
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("com.mikepenz:multiplatform-markdown-renderer-jvm:0.4.0")
 }
 
 tasks.test {
