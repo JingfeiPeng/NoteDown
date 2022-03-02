@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.31"
+    kotlin("kapt") version "1.6.10"
     id("org.jetbrains.compose") version "1.0.0"
 }
 
@@ -21,6 +22,13 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.mockito:mockito-core:3.+")
     implementation(compose.desktop.currentOs)
+
+    val roomVersion = "2.2.6"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+
+    implementation("androidx.room:room-ktx:$roomVersion")
+
 }
 
 tasks.test {
