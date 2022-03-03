@@ -20,7 +20,6 @@ internal class FileIOTest {
 
     private val basePath =  System.getProperty("user.home")+"/NotesTaker"
 
-
     @BeforeEach
     fun setup() {
         if (!File(basePath).exists()) {

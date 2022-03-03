@@ -32,20 +32,27 @@ class FileIO {
         }
 
         fun makeFile(dir: NoteFolder, name: String): Pair<NoteFolder?, NoteFile?> {
-            val newFile = File(dir.file, name)
+            // append .md extension
+            val nameWithExtension = "$name.md"
+            val newFile = File(dir.file, nameWithExtension)
             if (!newFile.exists()) {
                 newFile.createNewFile()
             }
 
             val noteFolder = readNotesFolder().find { it.name == dir.name }
             val noteFile = noteFolder?.children?.find {
-                it.name == name
+                it.name == nameWithExtension
             }
+
+            // store meta data
+            DocumentMetaCRUD.createDocumentMetaData(
+                dir.file, name
+            )
 
             return Pair(noteFolder, noteFile)
         }
 
-        fun readNotesFolder(): ArrayList<NoteFolder> {
+        fun readNotesFolder(extension: String = "md"): ArrayList<NoteFolder> {
             val notesDirectory = File(notesFolder)
             if (!File(notesFolder).exists()) {
                 notesDirectory.mkdir()
@@ -59,7 +66,8 @@ class FileIO {
                 }
                 if (it.isDirectory) {
                     foldersAndFiles.add(NoteFolder(it))
-                } else {
+                } else if (it.extension == extension) {
+                    // only show md files
                     foldersAndFiles.last().addChild(NoteFile(it))
                 }
             }
