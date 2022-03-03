@@ -67,7 +67,7 @@ class FileIO {
                 if (it.isDirectory) {
                     foldersAndFiles.add(NoteFolder(it))
                 } else if (it.extension == extension) {
-                    // only show md files
+                    // only show files that match the input extension param
                     foldersAndFiles.last().addChild(NoteFile(it))
                 }
             }
