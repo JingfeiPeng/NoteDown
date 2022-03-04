@@ -32,6 +32,9 @@ class FileIO {
         }
 
         fun makeFile(dir: NoteFolder, name: String): Pair<NoteFolder?, NoteFile?> {
+            if (name == null || name == "") {
+                return Pair(null, null)
+            }
             // append .md extension
             val nameWithExtension = "$name.md"
             val newFile = File(dir.file, nameWithExtension)
