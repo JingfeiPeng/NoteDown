@@ -1,13 +1,12 @@
 package database
 
 import kotlinx.serialization.*
-import util.dateSerializer
+import util.DateSerializer
 import java.util.*
 
 @Serializable
 data class Document(
     val path: String,
-    @Serializable(with = dateSerializer::class)
+    @Serializable(with = DateSerializer::class)
     val createdOn: Date,
-) {
-}
+) 
