@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
-import presentation.updateSelectedFile
 import java.io.File
 
 
@@ -48,7 +47,7 @@ class FileIO {
             }
 
             // store meta data
-            DocumentMetaCRUD.createDocumentMetaData(
+            DocumentMetaCRUDJson.createDocumentMetaData(
                 dir.file, name
             )
 

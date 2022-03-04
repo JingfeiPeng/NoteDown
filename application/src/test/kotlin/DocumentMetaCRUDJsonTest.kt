@@ -1,19 +1,13 @@
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
-import data.NoteFile
-import data.NoteFolder
 import org.junit.jupiter.api.*
-import persistence.FileIO
 import java.io.File
 
-import org.mockito.Mock;
-import persistence.DocumentMetaCRUD
+import persistence.DocumentMetaCRUDJson
 import java.util.*
 import kotlin.test.*
 import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class DocumentMetaCRUDTest {
+internal class DocumentMetaCRUDJsonTest {
 
     val basePath =  File(System.getProperty("user.home")+"/NotesTaker")
     val testingFolder = File(basePath,"testingTestingTestingFolderNAKSJDNsa")
@@ -37,7 +31,7 @@ internal class DocumentMetaCRUDTest {
         val name = "randomFile"
 
         // act
-        DocumentMetaCRUD.createDocumentMetaData(testingFolder, name)
+        DocumentMetaCRUDJson.createDocumentMetaData(testingFolder, name)
 
         // assert
         val createdMetaFile = File(testingFolder, "$name.json")
@@ -54,9 +48,9 @@ internal class DocumentMetaCRUDTest {
 
         // act
         for (name in names) {
-            DocumentMetaCRUD.createDocumentMetaData(testingFolder, name)
+            DocumentMetaCRUDJson.createDocumentMetaData(testingFolder, name)
         }
-        val docs = DocumentMetaCRUD.readAllMetaData()
+        val docs = DocumentMetaCRUDJson.readAllMetaData()
 
         // assert
         val checks = arrayOf(false, false)
