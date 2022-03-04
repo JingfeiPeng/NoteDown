@@ -60,7 +60,7 @@ internal class DocumentMetaCRUDJsonTest {
                 if (doc.path == "${testingFolder.name}/${name}") {
                     checks[index] = true
                     // the files were created just now
-                    assertEquals(Math.abs(doc.createdOn-Date().time) <= 1000, true)
+                    assertEquals(Math.abs(doc.createdOn.time-Date().time) <= 1000, true)
                 }
             }
         }

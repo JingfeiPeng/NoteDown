@@ -115,7 +115,8 @@ internal class FileIOTest {
 
         // Cleanup
         fileNode.file.delete()
-        folderNode.file.delete()
+        File(testingFolder, "$name.json").delete()
+        testingFolder.delete()
     }
 
     @AfterEach
