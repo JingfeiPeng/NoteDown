@@ -24,6 +24,14 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("com.mikepenz:multiplatform-markdown-renderer-jvm:0.4.0")
+
+    val commonMarkVersion = "0.18.2"
+    val commonMarkExtensions = setOf("gfm-strikethrough")
+    implementation("org.commonmark", "commonmark", commonMarkVersion)
+    commonMarkExtensions.forEach { extension ->
+        implementation("org.commonmark", "commonmark-ext-$extension", commonMarkVersion)
+    }
+    implementation("org.jsoup:jsoup:1.14.3")
 }
 
 tasks.test {
