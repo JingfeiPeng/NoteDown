@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
+import presentation.markdown.MarkdownRenderers
 
 @Composable
 @Preview
@@ -59,7 +60,7 @@ fun MainArea(
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea(textState, selectedFile)
         }
-        MarkdownRendererArea(textState)
+        MarkdownRendererArea(textState, rendererFun = MarkdownRenderers.MIKE_PENZ_MARKDOWN.renderFun)
     }
 }
 

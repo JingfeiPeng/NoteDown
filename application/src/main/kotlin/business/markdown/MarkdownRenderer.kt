@@ -1,6 +1,6 @@
 package business.markdown
 
-import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 
 interface Emitter<in DataType, out EmittedType> {
     fun emitFrom(from: DataType): EmittedType
@@ -20,16 +20,15 @@ abstract class EmissionRenderer<in DataType, EmittedType>(
     }
 }
 
-interface MarkdownHTMLEmitter : Emitter<String, String>
-interface HTMLTreeEmitter : Emitter<String, Document>
+interface MarkdownHtmlEmitter : Emitter<String, String>
+interface HtmlTreeEmitter : Emitter<String, Element>
 
 interface MarkdownRenderer : Renderer<String>
-interface HTMLRenderer : Renderer<String>
-interface HTMLTreeRenderer : Renderer<Document>
+interface HtmlRenderer : Renderer<String>
+interface HtmlTreeRenderer : Renderer<Element>
 
-class MarkdownHTMLRenderer(htmlEmitter: MarkdownHTMLEmitter, htmlRenderer: HTMLRenderer) :
-    EmissionRenderer<String, String>(htmlEmitter, htmlRenderer)
-class HTMLParsingRenderer(treeEmitter: HTMLTreeEmitter, treeRenderer: HTMLTreeRenderer) :
-    EmissionRenderer<String, Document>(treeEmitter, treeRenderer)
-
+class MarkdownHtmlRenderer(htmlEmitter: MarkdownHtmlEmitter, htmlRenderer: HtmlRenderer) :
+    MarkdownRenderer, EmissionRenderer<String, String>(htmlEmitter, htmlRenderer)
+class HtmlParsingRenderer(treeEmitter: HtmlTreeEmitter, treeRenderer: HtmlTreeRenderer) :
+    HtmlRenderer, EmissionRenderer<String, Element>(treeEmitter, treeRenderer)
 
