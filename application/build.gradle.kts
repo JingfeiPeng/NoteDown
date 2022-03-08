@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.5.31"
     id("org.jetbrains.compose") version "1.0.0"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "cs398.team109.notetaker"
@@ -21,6 +22,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.mockito:mockito-core:3.+")
     implementation(compose.desktop.currentOs)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 }
 
 tasks.test {
