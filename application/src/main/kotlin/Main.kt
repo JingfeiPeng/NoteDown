@@ -3,27 +3,22 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import presentation.DocumentEditingArea
-import presentation.DocumentSelectionArea
-import presentation.MarkdownRendererArea
-import presentation.TextCustomizationMenu
-import androidx.compose.runtime.mutableStateOf
 
 
 import persistence.FileIO
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
+import presentation.*
+import java.util.Calendar
 
 @Composable
 @Preview
@@ -31,12 +26,22 @@ fun App(
     textState: MutableState<TextFieldValue>,
     selectedFolder: MutableState<NoteFolder?>,
     selectedFile: MutableState<NoteFile?>,
+    calendarView: MutableState<Boolean>,
 ) {
-    MaterialTheme {
-        BoxWithConstraints {
+    if (calendarView.value) {
+        MaterialTheme {
             Column {
-                TextCustomizationMenu(textState)
-                MainArea(textState, selectedFolder, selectedFile)
+                CalendarView()
+            }
+        }
+    }
+    else {
+        MaterialTheme {
+            BoxWithConstraints {
+                Column {
+                    TextCustomizationMenu(textState)
+                    MainArea(textState, selectedFolder, selectedFile)
+                }
             }
         }
     }
@@ -67,6 +72,7 @@ fun MainArea(
 fun FrameWindowScope.MenuItems(
     textState: MutableState<TextFieldValue>,
     file: NoteFile?,
+    calendarView: MutableState<Boolean>
 )  {
     MenuBar {
         Menu("File") {
@@ -76,8 +82,15 @@ fun FrameWindowScope.MenuItems(
                 }
             })
         }
-        Menu("Notes Calendar View") {}
+        Menu("Notes Calendar View") {
+            Item("View", onClick = {
+                print(calendarView)
+                calendarView.value = !(calendarView.value)
+                print(calendarView)
+            })
+        }
         Menu("Help") {}
+
     }
 }
 
@@ -86,10 +99,12 @@ fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
+
+        val calendarView = remember { mutableStateOf<Boolean>(true) };
         val textState = remember { mutableStateOf(TextFieldValue()) }
         val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
         val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
-        MenuItems(textState, selectedFile.value)
-        App(textState, selectedFolder, selectedFile)
+        MenuItems(textState, selectedFile.value, calendarView)
+        App(textState, selectedFolder, selectedFile, calendarView)
     }
 }
