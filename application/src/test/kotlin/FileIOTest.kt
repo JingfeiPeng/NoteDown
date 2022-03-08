@@ -20,7 +20,6 @@ internal class FileIOTest {
 
     private val basePath =  System.getProperty("user.home")+"/NotesTaker"
 
-
     @BeforeEach
     fun setup() {
         if (!File(basePath).exists()) {
@@ -100,7 +99,7 @@ internal class FileIOTest {
         val testingFolder = File("$basePath/IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiud")
         testingFolder.mkdir()
         val noteFolder = NoteFolder(testingFolder)
-        val name = "somefile.txt"
+        val name = "somefile"
 
         // Act
         val (folderNode, fileNode) = FileIO.makeFile(noteFolder, name)
@@ -109,14 +108,15 @@ internal class FileIOTest {
         assertNotNull(fileNode)
         assertNotNull(folderNode)
         assertContains(folderNode.children, fileNode)
-        assertEquals(name, fileNode.name)
+        assertEquals("$name.md", fileNode.name)
         assertTrue(fileNode.file.isFile)
         assertEquals(folderNode.file.absolutePath, File(fileNode.file.parent).absolutePath)
-        assertEquals(name, fileNode.file.name)
+        assertEquals("$name.md", fileNode.file.name)
 
         // Cleanup
         fileNode.file.delete()
-        folderNode.file.delete()
+        File(testingFolder, "$name.json").delete()
+        testingFolder.delete()
     }
 
     @AfterEach
