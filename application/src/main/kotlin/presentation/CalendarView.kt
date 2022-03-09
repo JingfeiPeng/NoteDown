@@ -95,7 +95,6 @@ fun dateDiv(
         ) {
             Text(
                 buildAnnotatedString {
-//                    append("welcome to ")
                     if (calMap[stripedCal] != null) {
                         withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color(0xFF4552B8))
                         ) {
@@ -140,7 +139,6 @@ fun todaysDate(
         ) {
             Text(
                 buildAnnotatedString {
-//                    append("welcome to ")
                     if (calMap[stripedCal] != null) {
                         withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color.Red)
                         ) {
@@ -191,7 +189,6 @@ fun CalendarView(calendarView: MutableState<Boolean>) {
         } else {
             calMap[cal]?.add(metaData)
         }
-        println(calMap)
     }
 
 
