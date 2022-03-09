@@ -21,9 +21,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import database.Document
+import persistence.DocumentMetaCRUDJson.readAllMetaData
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Calendar
 
 
 fun getFirstDate(month: Int): Int {
@@ -58,7 +59,6 @@ fun emptyDiv() {
         ) {
             Text(
                 buildAnnotatedString {
-//                    append("welcome to ")
                     withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color(0xFF4552B8))
                     ) {
 
@@ -70,7 +70,19 @@ fun emptyDiv() {
 }
 
 @Composable
-fun dateDiv(number: Int, selectedDate: MutableState<Calendar>, cal: MutableState<Calendar>) {
+fun dateDiv(
+    number: Int,
+    selectedDate: MutableState<Calendar>,
+    cal: MutableState<Calendar>,
+    calMap: HashMap<Calendar, MutableList<Document>>
+) {
+//    Color(0xFF4552B8)
+    val stripedCal: Calendar = cal.value
+    stripedCal[Calendar.DAY_OF_MONTH] = number
+    stripedCal[Calendar.HOUR_OF_DAY] = 0
+    stripedCal[Calendar.MINUTE] = 0
+    stripedCal[Calendar.SECOND] = 0
+    stripedCal[Calendar.MILLISECOND] = 0
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,33 +96,43 @@ fun dateDiv(number: Int, selectedDate: MutableState<Calendar>, cal: MutableState
             Text(
                 buildAnnotatedString {
 //                    append("welcome to ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color(0xFF4552B8))
-                    ) {
-                        append(number.toString())
+                    if (calMap[stripedCal] != null) {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color(0xFF4552B8))
+                        ) {
+                            append(number.toString() + " (" + calMap[stripedCal]?.size.toString() + ")")
+                        }
+                    } else {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color.Gray)
+                        ) {
+                            append("$number   ")
+                        }
                     }
+
                 }
             )
-//            Text(
-//                buildAnnotatedString {
-//                    append("Now you are in the ")
-//                    withStyle(style = SpanStyle(fontWeight = FontWeight.W900)) {
-//                        append("Card")
-//                    }
-//                    append(" section")
-//                }
-//            )
         }
     }
 
 }
 
 @Composable
-fun todaysDate(number: Int) {
+fun todaysDate(
+    number: Int,
+    selectedDate: MutableState<Calendar>,
+    cal: MutableState<Calendar>,
+    calMap: HashMap<Calendar, MutableList<Document>>
+) {
+    val stripedCal: Calendar = cal.value
+    stripedCal[Calendar.DAY_OF_MONTH] = number
+    stripedCal[Calendar.HOUR_OF_DAY] = 0
+    stripedCal[Calendar.MINUTE] = 0
+    stripedCal[Calendar.SECOND] = 0
+    stripedCal[Calendar.MILLISECOND] = 0
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)
-            .clickable{ }
+            .clickable{ selectedDate.value = copyDate(number, cal) }
 
     ) {
         Column(
@@ -119,10 +141,18 @@ fun todaysDate(number: Int) {
             Text(
                 buildAnnotatedString {
 //                    append("welcome to ")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color.Red)
-                    ) {
-                        append(number.toString())
+                    if (calMap[stripedCal] != null) {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color.Red)
+                        ) {
+                            append(number.toString() + " (" + calMap[stripedCal]?.size.toString() + ")")
+                        }
+                    } else {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color.Red)
+                        ) {
+                            append("$number   ")
+                        }
                     }
+
                 }
             )
         }
@@ -139,11 +169,31 @@ fun dayDiv(day: Int) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarView() {
+fun CalendarView(calendarView: MutableState<Boolean>) {
     val cal : MutableState<Calendar> = remember { mutableStateOf(Calendar.getInstance()) }
     val today : Calendar = Calendar.getInstance()
     today.setTime(Calendar.getInstance().getTime())
     var selectedDate: MutableState<Calendar> = remember { mutableStateOf(today) }
+    val calMap:HashMap<Calendar, MutableList<Document>> = HashMap<Calendar, MutableList<Document>>()
+    val allMetaData = readAllMetaData();
+
+    for (metaData in allMetaData) {
+//        val parsedCreatedOn = Date()
+        val cal: Calendar = Calendar.getInstance()
+        cal.time = metaData.createdOn
+        cal[Calendar.HOUR_OF_DAY] = 0
+        cal[Calendar.MINUTE] = 0
+        cal[Calendar.SECOND] = 0
+        cal[Calendar.MILLISECOND] = 0
+
+        if (calMap[cal] == null) {
+            calMap[cal] = mutableListOf(metaData)
+        } else {
+            calMap[cal]?.add(metaData)
+        }
+        println(calMap)
+    }
+
 
     val monthDate = SimpleDateFormat("MMM YYYY")
     val dayDate = SimpleDateFormat("MMM d")
@@ -172,7 +222,6 @@ fun CalendarView() {
             }
 
             val numbers = (1..cal.value.getActualMaximum(Calendar.DATE)).toList()
-
             val days = listOf("Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat")
             LazyVerticalGrid(
                     cells = GridCells.Fixed(7)
@@ -186,10 +235,11 @@ fun CalendarView() {
                     items(firstDay) { emptyDiv() }
                     items(numbers.size) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            if (cal.value.get(Calendar.DAY_OF_MONTH) == it + 1 && cal.value.get(Calendar.MONTH) == today.get(Calendar.MONTH) && cal.value.get(Calendar.YEAR) == today.get(Calendar.YEAR) ) {
-                                    todaysDate(it + 1)
+                            if (today.get(Calendar.DAY_OF_MONTH) == it + 1 && cal.value.get(Calendar.MONTH) == today.get(Calendar.MONTH) && cal.value.get(Calendar.YEAR) == today.get(Calendar.YEAR) ) {
+
+                                todaysDate(it + 1, selectedDate, cal, calMap)
                             } else {
-                                    dateDiv(it + 1, selectedDate, cal)
+                                    dateDiv(it + 1, selectedDate, cal, calMap)
                             }
                         }
 
@@ -198,7 +248,58 @@ fun CalendarView() {
             }
         }
         Box(modifier = Modifier.fillMaxWidth(1f).padding(5.dp)) {
-            Text("Notes for " + dayDate.format(selectedDate.value.getTime()).toString(), style = MaterialTheme.typography.body1)
+            Column() {
+                Text(
+                    "Notes for " + dayDate.format(selectedDate.value.getTime()).toString() + "\n",
+                    style = MaterialTheme.typography.h6
+                )
+
+
+                val stripedSelCal: Calendar = selectedDate.value
+                stripedSelCal[Calendar.HOUR_OF_DAY] = 0
+                stripedSelCal[Calendar.MINUTE] = 0
+                stripedSelCal[Calendar.SECOND] = 0
+                stripedSelCal[Calendar.MILLISECOND] = 0
+
+                if (calMap[stripedSelCal] == null) {
+
+                    Text("No notes on this day")
+
+                } else {
+                    LazyVerticalGrid(
+                        cells = GridCells.Fixed(1)
+                    ) {
+                        var x: Int = 0
+                        if (calMap[stripedSelCal] != null) {
+                            x = calMap[stripedSelCal]?.size!!
+                        }
+
+                        items(x) {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp)
+                                    .clickable{ calendarView.value = !calendarView.value }
+
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(15.dp)
+                                ) {
+                                    Text(
+                                        buildAnnotatedString {
+                                                withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color(0xFF4552B8))
+                                                ) {
+                                                    calMap[stripedSelCal]?.get(it)?.let { it1 -> append(it1.path) }
+                                                }
+                                        }
+                                    )
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
 import presentation.*
-import java.util.Calendar
 
 @Composable
 @Preview
@@ -31,7 +30,7 @@ fun App(
     if (calendarView.value) {
         MaterialTheme {
             Column {
-                CalendarView()
+                CalendarView(calendarView)
             }
         }
     }
@@ -84,9 +83,7 @@ fun FrameWindowScope.MenuItems(
         }
         Menu("Notes Calendar View") {
             Item("View", onClick = {
-                print(calendarView)
                 calendarView.value = !(calendarView.value)
-                print(calendarView)
             })
         }
         Menu("Help") {}
