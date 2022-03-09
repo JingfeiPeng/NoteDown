@@ -76,5 +76,9 @@ class FileIO {
 
             return foldersAndFiles
         }
+
+        fun duplicateFile(f: File) {
+            println(f.name)
+        }
     }
 }

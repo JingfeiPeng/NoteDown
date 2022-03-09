@@ -43,11 +43,19 @@ class TextCustomization {
                 )
             }
         }
+
         fun appendAroundSelected(
             textState: MutableState<TextFieldValue>,
             chars: String,
         ) {
             appendAroundSelected(textState, chars, chars)
+        }
+
+        fun insertImageTag(
+            textState: MutableState<TextFieldValue>,
+            imagePath: String,
+        ) {
+            
         }
     }
 }
