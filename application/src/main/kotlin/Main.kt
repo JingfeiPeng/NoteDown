@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
 import presentation.*
+import presentation.markdown.MarkdownRenderers
 
 @Composable
 @Preview
@@ -63,7 +64,7 @@ fun MainArea(
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea(textState, selectedFile)
         }
-        MarkdownRendererArea(textState)
+        MarkdownRendererArea(textState, rendererFun = MarkdownRenderers.MIKE_PENZ_MARKDOWN.renderFun)
     }
 }
 
@@ -97,7 +98,7 @@ fun main() = application {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
 
-        val calendarView = remember { mutableStateOf<Boolean>(true) };
+        val calendarView = remember { mutableStateOf<Boolean>(false) };
         val textState = remember { mutableStateOf(TextFieldValue()) }
         val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
         val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
