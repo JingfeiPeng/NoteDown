@@ -31,7 +31,7 @@ class FileIO {
         }
 
         fun makeFile(dir: NoteFolder, name: String): Pair<NoteFolder?, NoteFile?> {
-            if (name == null || name == "") {
+            if (name == "") {
                 return Pair(null, null)
             }
             // append .md extension

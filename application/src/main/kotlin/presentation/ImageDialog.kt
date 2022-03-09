@@ -7,6 +7,7 @@ import java.awt.FileDialog
 import java.awt.Frame
 import java.io.FilenameFilter
 
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ImageDialog(
@@ -15,6 +16,10 @@ fun ImageDialog(
 ) = AwtWindow(
     create = {
         object : FileDialog(parent, "Choose a file", LOAD) {
+            init {
+                // only choose image files
+                setFile("*.jpg;*.jpeg")
+            }
             override fun setVisible(value: Boolean) {
                 super.setVisible(value)
                 if (value) {
@@ -26,9 +31,6 @@ fun ImageDialog(
                 }
             }
 
-            override fun setFilenameFilter(filter: FilenameFilter?) {
-                super.setFilenameFilter(filter)
-            }
         }
     },
     dispose = FileDialog::dispose
