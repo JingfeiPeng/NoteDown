@@ -55,7 +55,18 @@ class TextCustomization {
             textState: MutableState<TextFieldValue>,
             imagePath: String,
         ) {
-            
+            val beforeSelection = textState.value.getTextBeforeSelection(Int.MAX_VALUE)
+            val selectedText = textState.value.getSelectedText()
+            val afterSelection = textState.value.getTextAfterSelection(
+                textState.value.text.length - beforeSelection.length - selectedText.length
+            )
+            // Alternatively: ![alt text](maxresdefault.jpg "Title")
+            val imgInsert = "<img src=\"$imagePath\">"
+
+            textState.value = TextFieldValue(
+                "$beforeSelection$selectedText$imgInsert$afterSelection",
+                TextRange(beforeSelection.length+imgInsert.length)
+            )
         }
     }
 }

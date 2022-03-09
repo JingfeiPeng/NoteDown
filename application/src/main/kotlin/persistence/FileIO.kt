@@ -78,6 +78,7 @@ class FileIO {
         }
 
         fun duplicateFile(f: File) {
+            // to-do: move the file from given location to a location where it can be displayed
             println(f.name)
         }
     }

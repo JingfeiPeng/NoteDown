@@ -120,19 +120,22 @@ fun TextCustomizationMenu(textState: MutableState<TextFieldValue>) {
 }
 
 @Composable
-fun InsertImage() {
+fun InsertImage(textState: MutableState<TextFieldValue>) {
     var isFileChooserOpen by remember { mutableStateOf(false) }
     Button(onClick = {
         isFileChooserOpen = true
     }) {
         Text("Insert image")
     }
+    // somehow can't reopen the
+    println(isFileChooserOpen)
     if (isFileChooserOpen) {
         ImageDialog(
             onCloseRequest = {
                 isFileChooserOpen = false
                 if (it != null && File(it).exists()) {
                     FileIO.duplicateFile(File(it))
+                    TextCustomization.insertImageTag(textState, it)
                 }
             }
         )
@@ -145,7 +148,7 @@ fun TopBar(textState: MutableState<TextFieldValue>) {
         title = {
             Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                 TextCustomizationMenu(textState)
-                InsertImage()
+                InsertImage(textState)
             }
         },
     )
