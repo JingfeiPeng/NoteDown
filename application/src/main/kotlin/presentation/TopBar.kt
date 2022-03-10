@@ -127,8 +127,6 @@ fun InsertImage(textState: MutableState<TextFieldValue>) {
     }) {
         Text("Insert image")
     }
-    // somehow can't reopen the dialog without this line
-    println(isFileChooserOpen)
     if (isFileChooserOpen) {
         ImageDialog(
             onCloseRequest = {

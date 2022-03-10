@@ -29,7 +29,6 @@ fun ImageDialog(
                     }
                 }
             }
-
         }
     },
     dispose = FileDialog::dispose
