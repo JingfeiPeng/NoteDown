@@ -32,7 +32,7 @@ fun App(
     if (calendarView.value) {
         MaterialTheme {
             Column {
-                CalendarView(calendarView, selectedFolder, selectedFile)
+                CalendarView(calendarView, selectedFolder, selectedFile, textState)
             }
         }
     }

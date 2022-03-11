@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import data.NoteFile
@@ -173,7 +174,8 @@ fun dayDiv(day: Int) {
 fun CalendarView(
     calendarView: MutableState<Boolean>,
     selectedFolder: MutableState<NoteFolder?>,
-    selectedFile: MutableState<NoteFile?>
+    selectedFile: MutableState<NoteFile?>,
+    textState: MutableState<TextFieldValue>,
 ) {
     val cal : MutableState<Calendar> = remember { mutableStateOf(Calendar.getInstance()) }
     val today : Calendar = Calendar.getInstance()
@@ -293,7 +295,11 @@ fun CalendarView(
                                                     selectedFolder.value = folder
                                                     for (file in folder.children) {
                                                         if (file.name.contains(path.split("/")[1])) {
-                                                            selectedFile.value = file
+                                                            updateSelectedFile(
+                                                                selectedFile,
+                                                                textState,
+                                                                file,
+                                                            )
                                                         }
                                                     }
                                                 }
