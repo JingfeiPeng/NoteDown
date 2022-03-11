@@ -8,6 +8,7 @@ import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import androidx.compose.runtime.mutableStateOf
 
 
 import persistence.FileIO
@@ -39,7 +40,7 @@ fun App(
         MaterialTheme {
             BoxWithConstraints {
                 Column {
-                    TextCustomizationMenu(textState)
+                    TopBar(textState)
                     MainArea(textState, selectedFolder, selectedFile)
                 }
             }
@@ -64,7 +65,7 @@ fun MainArea(
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea(textState, selectedFile)
         }
-        MarkdownRendererArea(textState, rendererFun = MarkdownRenderers.MIKE_PENZ_MARKDOWN.renderFun)
+        MarkdownRendererArea(textState, rendererFun = MarkdownRenderers.SWING_BROWSER_MARKDOWN.renderFun)
     }
 }
 
@@ -97,7 +98,6 @@ fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
-
         val calendarView = remember { mutableStateOf<Boolean>(false) };
         val textState = remember { mutableStateOf(TextFieldValue()) }
         val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
@@ -106,3 +106,4 @@ fun main() = application {
         App(textState, selectedFolder, selectedFile, calendarView)
     }
 }
+

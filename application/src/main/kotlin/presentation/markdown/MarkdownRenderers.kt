@@ -17,4 +17,10 @@ enum class MarkdownRenderers(val displayString: String, val renderFun: (Composab
             HtmlParsingRenderer(JsoupEmitter(), HtmlTreeComposeRenderer(composableConsumer))
         )
     }),
+    SWING_BROWSER_MARKDOWN("Swing Browser Markdown", { composableConsumer ->
+        MarkdownHtmlRenderer(
+            CommonMarkEmitter(),
+            SwingBrowserComposeRenderer(composableConsumer)
+        )
+    })
 }
