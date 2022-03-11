@@ -15,6 +15,7 @@ class FileIO {
             file?.let { file.file.writeText(text) }
         }
 
+
         fun loadFile(textState: MutableState<TextFieldValue>, file: NoteFile) {
             textState.value = TextFieldValue(file.file.readText())
         }
