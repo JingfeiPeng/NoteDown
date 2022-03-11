@@ -21,8 +21,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import data.NoteFile
+import data.NoteFolder
 import database.Document
 import persistence.DocumentMetaCRUDJson.readAllMetaData
+import persistence.FileIO
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -167,7 +170,11 @@ fun dayDiv(day: Int) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarView(calendarView: MutableState<Boolean>) {
+fun CalendarView(
+    calendarView: MutableState<Boolean>,
+    selectedFolder: MutableState<NoteFolder?>,
+    selectedFile: MutableState<NoteFile?>
+) {
     val cal : MutableState<Calendar> = remember { mutableStateOf(Calendar.getInstance()) }
     val today : Calendar = Calendar.getInstance()
     today.setTime(Calendar.getInstance().getTime())
@@ -276,8 +283,23 @@ fun CalendarView(calendarView: MutableState<Boolean>) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(15.dp)
-                                    .clickable{ calendarView.value = !calendarView.value }
-
+                                    .clickable{
+                                        val path = calMap[stripedSelCal]?.get(it)?.let { it1 -> it1.path }
+                                        if (path != null) {
+                                            calendarView.value = !calendarView.value
+                                            val folders = FileIO.readNotesFolder();
+                                            for (folder in folders) {
+                                                if (path.contains(folder.name)) {
+                                                    selectedFolder.value = folder
+                                                    for (file in folder.children) {
+                                                        if (file.name.contains(path.split("/")[1])) {
+                                                            selectedFile.value = file
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                             ) {
                                 Column(
                                     modifier = Modifier.padding(15.dp)
