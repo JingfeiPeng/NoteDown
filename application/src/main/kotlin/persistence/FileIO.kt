@@ -31,7 +31,7 @@ class FileIO {
         }
 
         fun makeFile(dir: NoteFolder, name: String): Pair<NoteFolder?, NoteFile?> {
-            if (name == null || name == "") {
+            if (name == "") {
                 return Pair(null, null)
             }
             // append .md extension
@@ -75,6 +75,10 @@ class FileIO {
             }
 
             return foldersAndFiles
+        }
+
+        fun duplicateFile(f: File) {
+            // to-do: move the file from given location to a location where it can be displayed
         }
     }
 }

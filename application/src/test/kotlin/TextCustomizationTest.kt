@@ -72,4 +72,26 @@ internal class TextCustomizationTest {
             textState.value.text
         )
     }
+
+    @Test
+    fun testinsertImageTag() {
+        // arrange
+        val startRange = 6
+        val textState =  mutableStateOf(TextFieldValue(
+            "Hello, this is a text document\nHere",
+            TextRange(startRange)
+        ))
+
+        // act
+        TextCustomization.Companion.insertImageTag(
+            textState,
+            "test.jpg"
+        )
+
+        // test
+        assertEquals(
+            "Hello,<img src=\"test.jpg\"> this is a text document\nHere",
+            textState.value.text
+        )
+    }
 }
