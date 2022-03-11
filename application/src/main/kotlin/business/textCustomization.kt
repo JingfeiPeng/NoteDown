@@ -61,7 +61,7 @@ class TextCustomization {
                 textState.value.text.length - beforeSelection.length - selectedText.length
             )
             // Alternatively: ![alt text](maxresdefault.jpg "Title")
-            val imgInsert = "<img src=\"$imagePath\">"
+            val imgInsert = "<img src=\"file:$imagePath\">"
 
             textState.value = TextFieldValue(
                 "$beforeSelection$selectedText$imgInsert$afterSelection",
