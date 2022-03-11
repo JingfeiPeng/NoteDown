@@ -90,7 +90,7 @@ internal class TextCustomizationTest {
 
         // test
         assertEquals(
-            "Hello,<img src=\"test.jpg\"> this is a text document\nHere",
+            "Hello,<img src=\"file:test.jpg\"> this is a text document\nHere",
             textState.value.text
         )
     }
