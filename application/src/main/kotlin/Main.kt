@@ -65,7 +65,7 @@ fun MainArea(
         Box(modifier = Modifier.fillMaxWidth(0.6f)) {
             DocumentEditingArea(textState, selectedFile)
         }
-        MarkdownRendererArea(textState, rendererFun = MarkdownRenderers.MIKE_PENZ_MARKDOWN.renderFun)
+        MarkdownRendererArea(textState, rendererFun = MarkdownRenderers.SWING_BROWSER_MARKDOWN.renderFun)
     }
 }
 
