@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.SwingPanel
 import business.markdown.HtmlRenderer
@@ -32,7 +33,26 @@ class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : Html
 
     @Composable
     override fun composableRender(from: String) {
+        val swingPane = remember {
+            JEditorPane()
+        }
+
+        val scrollPane = remember {
+            JScrollPane()
+        }
+
         val scrollState = rememberScrollState()
+
+        DisposableEffect(Pair(swingPane, scrollPane)) {
+            swingPane.apply {
+                contentType = "text/html"
+                isEditable = false
+            }
+            scrollPane.apply {
+                add(swingPane)
+            }
+            onDispose {}
+        }
 
         Column(
             modifier = Modifier
