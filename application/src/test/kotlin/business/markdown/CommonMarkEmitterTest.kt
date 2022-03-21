@@ -19,7 +19,7 @@ internal class CommonMarkEmitterTest {
         """.trimIndent().addNewline()
 
         val expectedHtml = """
-            <p><del><strong>STRUCK BOLD</strong></del></p>
+            <p><s><strong>STRUCK BOLD</strong></s></p>
             <h1>HEADER</h1>
             <p>Paragraph without stuff</p>
         """.trimIndent().addNewline()
