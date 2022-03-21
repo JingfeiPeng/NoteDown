@@ -103,7 +103,7 @@ fun TextCustomizationMenu(textState: MutableState<TextFieldValue>) {
     }) { Text("I", fontStyle = FontStyle.Italic) }
     CustomizationButton(onClick = {
         // underline text with <ins> </ins>
-        TextCustomization.appendAroundSelected(textState, "<ins>", "</ins>")
+        TextCustomization.appendAroundSelected(textState, "<u>", "</u>")
     }) { Text("U", style = TextStyle(textDecoration = TextDecoration.Underline)) }
     CustomizationButton(onClick = {
         TextCustomization.appendAroundSelected(textState, "~~")
