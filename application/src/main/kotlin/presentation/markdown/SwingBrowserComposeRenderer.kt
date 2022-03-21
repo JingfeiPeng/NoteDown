@@ -44,7 +44,11 @@ class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : Html
         ) {
             SwingPanel(factory = {
                 scrollPane
-            }, update = { swingPane.text = from })
+            }, update = {
+                val caretPosition: Int = swingPane.caretPosition
+                swingPane.text = from
+                swingPane.caretPosition = Math.min(caretPosition, from.length)
+            })
         }
     }
 }
