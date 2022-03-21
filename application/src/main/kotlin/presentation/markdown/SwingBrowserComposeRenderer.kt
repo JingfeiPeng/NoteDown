@@ -11,6 +11,10 @@ import java.awt.Desktop
 import javax.swing.JEditorPane
 import javax.swing.JScrollPane
 import javax.swing.event.HyperlinkEvent
+import javax.swing.text.DefaultCaret
+
+
+
 
 
 class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : HtmlRenderer,
@@ -31,6 +35,7 @@ class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : Html
                         Desktop.getDesktop().browse(it.url.toURI())
                     }
                 }
+                (caret as DefaultCaret).updatePolicy = DefaultCaret.NEVER_UPDATE
             }
         }
 
@@ -45,9 +50,7 @@ class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : Html
             SwingPanel(factory = {
                 scrollPane
             }, update = {
-                val caretPosition: Int = swingPane.caretPosition
                 swingPane.text = from
-                swingPane.caretPosition = Math.min(caretPosition, from.length)
             })
         }
     }
