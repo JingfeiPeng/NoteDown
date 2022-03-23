@@ -24,8 +24,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	runtimeOnly("com.h2database:h2")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//	implementation("org.springframework.data:spring-data-relational")
-//	implementation("com.h2database:h2:2.1.210")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

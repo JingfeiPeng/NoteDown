@@ -37,3 +37,4 @@ out/
 .vscode/
 
 data/testdb.trace.db
+!src/main/resources/sql/schema.sql
