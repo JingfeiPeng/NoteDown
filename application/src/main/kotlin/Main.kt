@@ -14,10 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import persistence.FileIO
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Card
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
+import persistence.User
 import presentation.*
 import presentation.markdown.MarkdownRenderers
 
@@ -28,11 +31,18 @@ fun App(
     selectedFolder: MutableState<NoteFolder?>,
     selectedFile: MutableState<NoteFile?>,
     calendarView: MutableState<Boolean>,
+    userSettings: MutableState<Boolean>,
 ) {
     if (calendarView.value) {
         MaterialTheme {
             Column {
                 CalendarView(calendarView, selectedFolder, selectedFile, textState)
+            }
+        }
+    } else if (userSettings.value) {
+        MaterialTheme {
+            Column {
+                UserSettingsView()
             }
         }
     }
@@ -73,7 +83,8 @@ fun MainArea(
 fun FrameWindowScope.MenuItems(
     textState: MutableState<TextFieldValue>,
     file: NoteFile?,
-    calendarView: MutableState<Boolean>
+    calendarView: MutableState<Boolean>,
+    userSettings: MutableState<Boolean>
 )  {
     MenuBar {
         Menu("File") {
@@ -85,7 +96,14 @@ fun FrameWindowScope.MenuItems(
         }
         Menu("Notes Calendar View") {
             Item("View", onClick = {
+                userSettings.value = false
                 calendarView.value = !(calendarView.value)
+            })
+        }
+        Menu("User Settings") {
+            Item("User ID", onClick = {
+                calendarView.value = false
+                userSettings.value = !(userSettings.value)
             })
         }
         Menu("Help") {}
@@ -98,12 +116,14 @@ fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
+        User().getCurrentUserId()
+        val userSettings = remember { mutableStateOf<Boolean>(false) };
         val calendarView = remember { mutableStateOf<Boolean>(false) };
         val textState = remember { mutableStateOf(TextFieldValue()) }
         val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
         val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
-        MenuItems(textState, selectedFile.value, calendarView)
-        App(textState, selectedFolder, selectedFile, calendarView)
+        MenuItems(textState, selectedFile.value, calendarView, userSettings)
+        App(textState, selectedFolder, selectedFile, calendarView, userSettings)
     }
 }
 
