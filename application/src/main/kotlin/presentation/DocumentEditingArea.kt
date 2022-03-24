@@ -42,11 +42,11 @@ fun DocumentEditingArea(
                                 TextCustomization.appendAroundSelected(textState, "**")
                                 true
                             }
-                            Key.U -> {
+                            Key.D -> {
                                 TextCustomization.appendAroundSelected(textState, "*")
                                 true
                             }
-                            Key.L -> {
+                            Key.F -> {
                                 TextCustomization.appendAroundSelected(textState, "<u>", "<ul>")
                                 true
                             }
@@ -54,7 +54,7 @@ fun DocumentEditingArea(
                                 TextCustomization.appendAroundSelected(textState, "~")
                                 true
                             }
-                            Key.C -> {
+                            Key.W -> {
                                 TextCustomization.appendAroundSelected(textState, "\n```\n")
                                 true
                             }
