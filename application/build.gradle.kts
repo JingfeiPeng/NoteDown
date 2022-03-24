@@ -15,7 +15,7 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -24,6 +24,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     implementation("com.mikepenz:multiplatform-markdown-renderer-jvm:0.4.0")
+    implementation("com.codewaves.codehighlight:codehighlight:1.0.2")
 
     val commonMarkVersion = "0.18.2"
     val commonMarkExtensions = setOf("gfm-strikethrough")

@@ -12,10 +12,7 @@ import javax.swing.JEditorPane
 import javax.swing.JScrollPane
 import javax.swing.event.HyperlinkEvent
 import javax.swing.text.DefaultCaret
-
-
-
-
+import javax.swing.text.html.HTMLEditorKit
 
 class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : HtmlRenderer,
     ComposableRenderer<String>(composableConsumer) {
@@ -36,6 +33,31 @@ class SwingBrowserComposeRenderer(composableConsumer: ComposableConsumer) : Html
                     }
                 }
                 (caret as DefaultCaret).updatePolicy = DefaultCaret.NEVER_UPDATE
+
+                val htmlEditorKit = (editorKit as HTMLEditorKit)
+
+                val colourMapping = mapOf(
+                    Pair("keyword", "blue"),
+                    Pair("number", "blue"),
+                    Pair("function", "#00627A"),
+                    Pair("attr", "purple"),
+                    Pair("title", "#00627A"),
+                    Pair("string", "green")
+                )
+
+                htmlEditorKit.styleSheet.addRule("body { font-family: Roboto; font-size: 16pt; }")
+                htmlEditorKit.styleSheet.addRule("h1 { font-size: 24pt; }")
+                htmlEditorKit.styleSheet.addRule("h2 { font-size: 20pt; }")
+                htmlEditorKit.styleSheet.addRule("h3 { font-size: 18pt; }")
+                htmlEditorKit.styleSheet.addRule("h4 { font-size: 16pt; }")
+                htmlEditorKit.styleSheet.addRule("h5 { font-size: 16pt; }")
+                htmlEditorKit.styleSheet.addRule("h6 { font-size: 16pt; }")
+                htmlEditorKit.styleSheet.addRule("code { font-size: 14pt; background-color: #CCCCCC; }")
+
+
+                colourMapping.forEach {
+                    htmlEditorKit.styleSheet.addRule(".hljs-${it.key} {color: ${it.value};}")
+                }
             }
         }
 
