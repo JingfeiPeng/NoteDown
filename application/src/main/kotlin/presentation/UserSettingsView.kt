@@ -30,15 +30,12 @@ fun UserSettingsView(userSettings: MutableState<Boolean>) {
             }
         )
         val ID_LIMIT: Int = User().STRING_LENGTH
-        if (textState.value.text.length <= 3)  {
-            Text("ID must have length of atleast 4")
-        }
-        if (textState.value.text.length > ID_LIMIT)  {
-            Text("ID must be no more then $ID_LIMIT characters")
+        if (textState.value.text.length != ID_LIMIT)  {
+            Text("ID must be ${ID_LIMIT} characters")
         }
         Row {
             TextButton(
-                enabled = textState.value.text.length in 4..ID_LIMIT,
+                enabled = textState.value.text.length == ID_LIMIT,
                 onClick = {
                 var currUser: User = User()
                 currUser.userId = textState.value.text
