@@ -47,7 +47,7 @@ fun DocumentEditingArea(
                                 true
                             }
                             Key.F -> {
-                                TextCustomization.appendAroundSelected(textState, "<u>", "<ul>")
+                                TextCustomization.appendAroundSelected(textState, "<u>", "</u>")
                                 true
                             }
                             Key.S -> {
