@@ -11,8 +11,6 @@ class UserFileService(val db: UserFileRepo) {
     fun findFilesByUserId(userId: String):List<UserFile> = db.findFilesByUserId(userId)
 
     fun updateUsersFiles(userFiles: UserFiles) {
-
-        throw Exception("lol")
         // clear previous entries
         db.deleteUserFiles(userFiles.userId)
         for (userFile in userFiles.files) {
