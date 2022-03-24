@@ -14,13 +14,10 @@ import androidx.compose.runtime.mutableStateOf
 import persistence.FileIO
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Card
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
-import persistence.User
 import presentation.*
 import presentation.markdown.MarkdownRenderers
 
@@ -42,7 +39,7 @@ fun App(
     } else if (userSettings.value) {
         MaterialTheme {
             Column {
-                UserSettingsView()
+                UserSettingsView(userSettings)
             }
         }
     }
@@ -116,7 +113,6 @@ fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
-        User().getCurrentUserId()
         val userSettings = remember { mutableStateOf<Boolean>(false) };
         val calendarView = remember { mutableStateOf<Boolean>(false) };
         val textState = remember { mutableStateOf(TextFieldValue()) }
