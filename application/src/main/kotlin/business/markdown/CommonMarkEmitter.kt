@@ -1,38 +1,24 @@
 package business.markdown
 
+import com.codewaves.codehighlight.core.Highlighter
 import org.commonmark.Extension
 import org.commonmark.ext.gfm.strikethrough.Strikethrough
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension
 import org.commonmark.node.Document
+import org.commonmark.node.FencedCodeBlock
 import org.commonmark.node.Node
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.NodeRenderer
 import org.commonmark.renderer.html.HtmlNodeRendererContext
 import org.commonmark.renderer.html.HtmlRenderer
-import org.commonmark.renderer.html.HtmlRenderer.HtmlRendererExtension
 import org.commonmark.renderer.html.HtmlWriter
 
-internal abstract class StrikethroughNodeRendererUTag : NodeRenderer {
+private class StrikethroughHtmlNodeRendererUTag(private val context: HtmlNodeRendererContext) : NodeRenderer {
+    private val html: HtmlWriter = context.writer
+
     override fun getNodeTypes(): Set<Class<out Node?>> {
         return setOf<Class<out Node?>>(Strikethrough::class.java)
     }
-}
-
-class StrikethroughExtensionUTag private constructor() : HtmlRendererExtension {
-
-    override fun extend(rendererBuilder: HtmlRenderer.Builder) {
-        rendererBuilder.nodeRendererFactory { context -> StrikethroughHtmlNodeRendererUTag(context) }
-    }
-
-    companion object {
-        fun create(): Extension {
-            return StrikethroughExtensionUTag()
-        }
-    }
-}
-
-private class StrikethroughHtmlNodeRendererUTag(private val context: HtmlNodeRendererContext) : StrikethroughNodeRendererUTag() {
-    private val html: HtmlWriter = context.writer
 
     override fun render(node: Node) {
         val attributes = context.extendAttributes(node, "s", emptyMap())
@@ -51,10 +37,36 @@ private class StrikethroughHtmlNodeRendererUTag(private val context: HtmlNodeRen
     }
 }
 
+private class HighlightedCodeBlockNodeRenderer(context: HtmlNodeRendererContext) : NodeRenderer {
+    private val html: HtmlWriter = context.writer
+    private val highlighter = Highlighter { com.codewaves.codehighlight.renderer.HtmlRenderer("hljs-") }
 
-class CommonMarkEmitter(extensions: List<Extension> = listOf(StrikethroughExtensionUTag.create(), StrikethroughExtension.create())) : MarkdownHtmlEmitter {
+    override fun getNodeTypes(): Set<Class<out Node?>> {
+        return setOf<Class<out Node?>>(FencedCodeBlock::class.java)
+    }
+
+    override fun render(node: Node) {
+        val codeBlock = node as FencedCodeBlock
+
+        val result: Highlighter.HighlightResult = highlighter.highlight(codeBlock.info, codeBlock.literal)
+
+        html.line()
+        html.tag("pre")
+        html.tag("code")
+        html.raw(result.result.toString())
+        html.tag("/code")
+        html.tag("/pre")
+        html.line()
+    }
+}
+
+class CommonMarkEmitter(extensions: List<Extension> = listOf(StrikethroughExtension.create())) : MarkdownHtmlEmitter {
     private val parser = Parser.builder().extensions(extensions).build()
-    private val renderer = HtmlRenderer.builder().extensions(extensions).build()
+    private val renderer = HtmlRenderer.builder()
+        .nodeRendererFactory(::StrikethroughHtmlNodeRendererUTag)
+        .nodeRendererFactory(::HighlightedCodeBlockNodeRenderer)
+        .extensions(extensions)
+        .build()
 
     override fun emitFrom(from: String): String {
         val document = parser.parse(from) as Document
