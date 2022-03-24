@@ -7,7 +7,13 @@
 # https://gradle.org/
 # https://github.com/gradle/gradle
 
-image: gradle:alpine
+default:
+  image: gradle:alpine
+  
+  before_script:
+    - cd application
+    - GRADLE_USER_HOME="$(pwd)/.gradle"
+    - export GRADLE_USER_HOME
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
 # is usually a priority over speed in CI environments. Using a fresh
@@ -15,11 +21,6 @@ image: gradle:alpine
 # isolated from any previous builds.
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
-before_script:
-  - cd application
-  - GRADLE_USER_HOME="$(pwd)/.gradle"
-  - export GRADLE_USER_HOME
 
 build:
   stage: build
@@ -40,3 +41,27 @@ test:
     paths:
       - application/build
       - application/.gradle
+
+package-linux:
+  image: gradle:latest
+  only:
+    refs:
+      - tags
+      - master
+  stage: deploy
+  before_script:
+    - cd application
+    - GRADLE_USER_HOME="$(pwd)/.gradle"
+    - export GRADLE_USER_HOME
+    - apt update
+    - apt install fakeroot -y
+  script: gradle packageDeb
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - application/build
+      - application/.gradle
+  artifacts:
+    paths:
+      - application/build/compose/binaries/main/deb/application_1.0.0-1_amd64.deb

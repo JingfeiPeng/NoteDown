@@ -15,6 +15,10 @@ import persistence.FileIO
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.useResource
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
@@ -110,7 +114,7 @@ fun FrameWindowScope.MenuItems(
 
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, title = "NoteDown", icon = painterResource("icon.png")) {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
         val userSettings = remember { mutableStateOf<Boolean>(false) };
