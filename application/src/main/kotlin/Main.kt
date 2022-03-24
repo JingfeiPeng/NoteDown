@@ -32,11 +32,18 @@ fun App(
     selectedFolder: MutableState<NoteFolder?>,
     selectedFile: MutableState<NoteFile?>,
     calendarView: MutableState<Boolean>,
+    userSettings: MutableState<Boolean>,
 ) {
     if (calendarView.value) {
         MaterialTheme {
             Column {
                 CalendarView(calendarView, selectedFolder, selectedFile, textState)
+            }
+        }
+    } else if (userSettings.value) {
+        MaterialTheme {
+            Column {
+                UserSettingsView(userSettings)
             }
         }
     }
@@ -77,7 +84,8 @@ fun MainArea(
 fun FrameWindowScope.MenuItems(
     textState: MutableState<TextFieldValue>,
     file: NoteFile?,
-    calendarView: MutableState<Boolean>
+    calendarView: MutableState<Boolean>,
+    userSettings: MutableState<Boolean>
 )  {
     MenuBar {
         Menu("File") {
@@ -89,7 +97,14 @@ fun FrameWindowScope.MenuItems(
         }
         Menu("Notes Calendar View") {
             Item("View", onClick = {
+                userSettings.value = false
                 calendarView.value = !(calendarView.value)
+            })
+        }
+        Menu("User Settings") {
+            Item("User ID", onClick = {
+                calendarView.value = false
+                userSettings.value = !(userSettings.value)
             })
         }
         Menu("Help") {}
@@ -102,12 +117,13 @@ fun main() = application {
     Window(onCloseRequest = ::exitApplication, title = "NoteDown", icon = painterResource("icon.png")) {
         // To-do: shouldn't pass the props around and down the children.
         // figure out a way to use redux like store
+        val userSettings = remember { mutableStateOf<Boolean>(false) };
         val calendarView = remember { mutableStateOf<Boolean>(false) };
         val textState = remember { mutableStateOf(TextFieldValue()) }
         val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
         val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
-        MenuItems(textState, selectedFile.value, calendarView)
-        App(textState, selectedFolder, selectedFile, calendarView)
+        MenuItems(textState, selectedFile.value, calendarView, userSettings)
+        App(textState, selectedFolder, selectedFile, calendarView, userSettings)
     }
 }
 
