@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 internal class UserTest {
-    private val userid = File("user.txt")
+    private val savedReferenceFolder = System.getProperty("user.home") + "/NotesTaker"
+    private val savedReference = ".user"
+    private val userid = File(savedReferenceFolder, savedReference)
 
     @Test
     fun checkForUser() {
