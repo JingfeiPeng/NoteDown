@@ -64,4 +64,4 @@ package-linux:
       - application/.gradle
   artifacts:
     paths:
-      - application/build/compose/binaries/main/deb/application_1.0.0-1_amd64.deb
+      - application/build/compose/binaries/main/deb/notedown_1.0.0-1_amd64.deb
