@@ -5,10 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -209,6 +208,13 @@ fun CalendarView(
         Box(modifier = Modifier.fillMaxWidth(0.7f)) {
         Column (horizontalAlignment = Alignment.CenterHorizontally) {
             Row() {
+                Button(
+                    onClick = {
+                        calendarView.value = !calendarView.value
+                    }
+                ) {
+                    Icon(Icons.Filled.DateRange, "Calendar")
+                }
                 TextButton(onClick = {
                     cal.value.add(Calendar.MONTH, -1);
                     cals.value = monthDate.format(cal.value.getTime())
