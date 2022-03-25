@@ -3,23 +3,20 @@
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.window.*
-import business.command.TextCommand
 import data.NoteFile
 import data.NoteFolder
 import persistence.FileIO
 import persistence.LocalWindowState
 import presentation.*
 import presentation.markdown.MarkdownRenderers
-import java.io.File
 
 @Composable
 @Preview
@@ -30,21 +27,16 @@ fun App(
     calendarView: MutableState<Boolean>,
     userSettings: MutableState<Boolean>,
 ) {
-    if (calendarView.value) {
-        MaterialTheme {
+    MaterialTheme(colors = MaterialTheme.colors.copy(primary = Color(90, 180, 90))) {
+        if (calendarView.value) {
             Column {
                 CalendarView(calendarView, selectedFolder, selectedFile, textState)
             }
-        }
-    } else if (userSettings.value) {
-        MaterialTheme {
+        } else if (userSettings.value) {
             Column {
                 UserSettingsView(userSettings)
             }
-        }
-    }
-    else {
-        MaterialTheme {
+        } else {
             BoxWithConstraints {
                 Column {
                     TopBar(textState)
@@ -76,6 +68,7 @@ fun MainArea(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FrameWindowScope.MenuItems(
     textState: MutableState<TextFieldValue>,
@@ -117,7 +110,7 @@ fun FrameWindowScope.MenuItems(
 
 
 fun main() = application {
-    var currentWindow = LocalWindowState()
+    val currentWindow = LocalWindowState()
     Window(onCloseRequest = {
         currentWindow.saveState()
         exitApplication()
