@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.TextFieldValue
 import business.TextCustomization
+import business.command.TextCommand
 import persistence.FileIO
 import java.io.File
 
@@ -89,26 +90,30 @@ fun codeBlockButton(textState: MutableState<TextFieldValue>) {
 
 @Composable
 fun TextCustomizationMenu(textState: MutableState<TextFieldValue>) {
+    val commandMap = mapOf(
+        "B" to TextCommand(textState, "**"),
+        "I" to TextCommand(textState, "*"),
+        "U" to TextCommand(textState, "<u>", "</u>"),
+        "S" to TextCommand(textState, "~~"),
+    )
+
     Box(modifier = Modifier.fillMaxWidth(0.20f)) {
         Text(
             text = "Text Customization Menu",
             style = MaterialTheme.typography.body1
         )
     }
-    CustomizationButton(onClick = {
-        TextCustomization.appendAroundSelected(textState, "**")
-    }) { Text("B", fontWeight=FontWeight.Bold) }
-    CustomizationButton(onClick = {
-        TextCustomization.appendAroundSelected(textState, "*")
-    }) { Text("I", fontStyle = FontStyle.Italic) }
-    CustomizationButton(onClick = {
-        // underline text with <ins> </ins>
-        TextCustomization.appendAroundSelected(textState, "<u>", "</u>")
-    }) { Text("U", style = TextStyle(textDecoration = TextDecoration.Underline)) }
-    CustomizationButton(onClick = {
-        TextCustomization.appendAroundSelected(textState, "~~")
-    }) {
-        Text( text = "S", style = TextStyle(textDecoration = TextDecoration.LineThrough))
+    CustomizationButton(onClick = { commandMap["B"]!!.runCommand() }) {
+        Text("B", fontWeight = FontWeight.Bold)
+    }
+    CustomizationButton(onClick = { commandMap["I"]!!.runCommand() }) {
+        Text("I", fontStyle = FontStyle.Italic)
+    }
+    CustomizationButton(onClick = { commandMap["U"]!!.runCommand() }) {
+        Text("U", style = TextStyle(textDecoration = TextDecoration.Underline))
+    }
+    CustomizationButton(onClick = { commandMap["S"]!!.runCommand() }) {
+        Text("S", style = TextStyle(textDecoration = TextDecoration.LineThrough))
     }
     Divider(
         color = Color.Gray,
