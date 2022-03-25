@@ -7,6 +7,8 @@ import java.io.File
 import java.util.*
 
 object DocumentMetaCRUDJson : DocumentMetaCRUD {
+    private val homeFolder = System.getProperty("user.home") + "/NotesTaker"
+
     override fun createDocumentMetaData(folder: File, name: String) {
         val string = Json.encodeToString(Document("${folder.name}/$name", Date()))
         val f = File(folder, "$name.json")
@@ -25,5 +27,10 @@ object DocumentMetaCRUDJson : DocumentMetaCRUD {
             }
         }
         return documents
+    }
+
+    override fun readMetaDataByFile(folder: String, fileName: String): Document {
+        val jsonFileName = fileName.split(".")[0]+".json"
+        return Json.decodeFromString<Document>(File("$homeFolder/$folder/$jsonFileName").readText())
     }
 }

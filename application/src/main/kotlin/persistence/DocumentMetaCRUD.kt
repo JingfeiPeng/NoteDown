@@ -7,4 +7,5 @@ import java.util.ArrayList
 interface DocumentMetaCRUD {
     fun createDocumentMetaData(folder: File, name: String)
     fun readAllMetaData(): ArrayList<Document>
+    fun readMetaDataByFile(folder: String, fileName: String): Document
 }

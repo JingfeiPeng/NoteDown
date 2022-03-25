@@ -38,3 +38,5 @@ out/
 
 data/testdb.trace.db
 !src/main/resources/sql/schema.sql
+
+data/testdb.mv.db
