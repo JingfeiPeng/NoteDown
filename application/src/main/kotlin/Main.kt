@@ -41,21 +41,19 @@ fun App(
     userSettings: MutableState<Boolean>,
     folders: MutableState<ArrayList<NoteFolder>>,
 ) {
-    MaterialTheme(colors = MaterialTheme.colors.copy(primary = Color(90, 180, 90))) {
-        if (calendarView.value) {
+    if (calendarView.value) {
+        Column {
+            CalendarView(calendarView, selectedFolder, selectedFile, textState)
+        }
+    } else if (userSettings.value) {
+        Column {
+            UserSettingsView(userSettings)
+        }
+    } else {
+        BoxWithConstraints {
             Column {
-                CalendarView(calendarView, selectedFolder, selectedFile, textState)
-            }
-        } else if (userSettings.value) {
-            Column {
-                UserSettingsView(userSettings)
-            }
-        } else {
-            BoxWithConstraints {
-                Column {
-                    TopBar(textState)
-                    MainArea(textState, selectedFolder, selectedFile, folders)
-                }
+                TopBar(textState)
+                MainArea(textState, selectedFolder, selectedFile, folders)
             }
         }
     }
@@ -151,20 +149,20 @@ fun FrameWindowScope.MenuItems(
                 userSettings.value = !(userSettings.value)
             })
         }
+        Menu("Sync") {
+            Item("Upload files to cloud", onClick = {
+                Sync.postUserFiles(FileIO.getAllUserFiles())
+            })
+            Item("Download files to local", onClick = {
+                alertUser.value = true
+            })
+        }
         Menu("Help") {
             Item("Bold CTRL/CMD + B") {}
             Item("Italics CTRL/CMD + I") {}
             Item("Underline CTRL/CMD + U") {}
             Item("Strikethrough CTRL/CMD + S") {}
             Item("Code block CTRL/CMD + W") {}
-            Menu("sync") {
-                Item("Upload files to cloud", onClick = {
-                    Sync.postUserFiles(FileIO.getAllUserFiles())
-                })
-                Item("Download files to local", onClick = {
-                    alertUser.value = true
-                })
-            }
         }
     }
 }
@@ -181,16 +179,18 @@ fun main() = application {
         state = currentWindow.state,
         icon = painterResource("icon.png")
     ) {
-        // To-do: shouldn't pass the props around and down the children.
-        // figure out a way to use redux like store
-        val userSettings = remember { mutableStateOf<Boolean>(false) };
-        val calendarView = remember { mutableStateOf<Boolean>(false) };
-        val textState = remember { mutableStateOf(TextFieldValue()) }
-        val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
-        val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
-        val folders = remember { mutableStateOf<ArrayList<NoteFolder>>(FileIO.readNotesFolder()) }
-        MenuItems(textState, selectedFile.value, calendarView, userSettings, folders)
-        App(textState, selectedFolder, selectedFile, calendarView, userSettings, folders)
+        MaterialTheme(colors = MaterialTheme.colors.copy(primary = Color(90, 180, 90))) {
+            // To-do: shouldn't pass the props around and down the children.
+            // figure out a way to use redux like store
+            val userSettings = remember { mutableStateOf<Boolean>(false) };
+            val calendarView = remember { mutableStateOf<Boolean>(false) };
+            val textState = remember { mutableStateOf(TextFieldValue()) }
+            val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
+            val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
+            val folders = remember { mutableStateOf<ArrayList<NoteFolder>>(FileIO.readNotesFolder()) }
+            MenuItems(textState, selectedFile.value, calendarView, userSettings, folders)
+            App(textState, selectedFolder, selectedFile, calendarView, userSettings, folders)
+        }
     }
 }
 
