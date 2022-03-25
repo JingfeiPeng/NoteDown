@@ -2,11 +2,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
+import database.Document
+import database.UserFile
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import persistence.FileIO
 import java.io.File
 
+
+import persistence.User
+import java.util.*
 import kotlin.test.*
 
 
@@ -68,6 +75,40 @@ internal class FileIOTest {
         // cleanup
         testingFile.delete()
         testingFolder.delete()
+    }
+
+    @Test
+    fun testGetAllUserFiles() {
+        // arrange
+        val testingFolder = File("$basePath/IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiud")
+        testingFolder.mkdir()
+        val testingFile = File("$basePath/IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiud/somefile.txt")
+        testingFile.createNewFile()
+        val metafile = File(testingFolder, "somefile.json")
+        val metaData = Document(
+            path = "somefile",
+            createdOn = Date(1648181072411),
+        )
+        metafile.writeText(Json.encodeToString(metaData))
+        val userID = User().getCurrentUserId()
+
+        // Act
+        val res = FileIO.getAllUserFiles()
+
+        // assert
+        val expectedFile = UserFile(
+            userId = userID,
+            fileName = "somefile.txt",
+            folderName = "IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiud",
+            createdOn = 1648181072411,
+            text = ""
+        )
+        res.contains(expectedFile)
+
+        // cleanup
+        testingFile.delete()
+        testingFolder.delete()
+        metafile.delete()
     }
 
     @Test

@@ -1,3 +1,6 @@
+import database.Document
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.*
 import java.io.File
 
@@ -39,6 +42,21 @@ internal class DocumentMetaCRUDJsonTest {
 
         // cleanup
         createdMetaFile.delete()
+    }
+
+    @Test
+    fun testReadMetaDataByFile() {
+        val metafile = File(testingFolder, "meta.json")
+        val metaData = Document(
+            path = "file",
+            createdOn = Date(1648181072411),
+        )
+        metafile.writeText(Json.encodeToString(metaData))
+
+        val doc = DocumentMetaCRUDJson.readMetaDataByFile("testingTestingTestingFolderNAKSJDNsa", "meta.md")
+
+        assertEquals(metaData, doc)
+        metafile.delete()
     }
 
     @Test
