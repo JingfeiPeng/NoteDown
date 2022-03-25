@@ -13,7 +13,6 @@ class LocalWindowState {
     val state: WindowState;
 
     constructor() {
-        println(savedReference)
         this.state = loadWindowState();
     }
 
