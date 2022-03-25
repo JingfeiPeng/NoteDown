@@ -146,7 +146,7 @@ internal class FileIOTest {
         assert(folderNode.file.exists())
 
         // Cleanup
-        folderNode.file.delete()
+        folderNode.file.deleteRecursively()
     }
 
     @AfterEach

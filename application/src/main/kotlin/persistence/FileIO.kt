@@ -37,8 +37,8 @@ class FileIO {
             return readNotesFolder().find { it.name == name }
         }
 
-        fun deleteFile(folder: NoteFile) {
-            folder.file.delete()
+        fun deleteFile(file: NoteFile) {
+            file.file.delete()
         }
 
         fun deleteFolder(folder: NoteFolder) {
