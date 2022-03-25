@@ -12,7 +12,6 @@ import androidx.compose.ui.window.application
 import androidx.compose.runtime.mutableStateOf
 
 
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -20,14 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.window.*
 import data.NoteFile
 import data.NoteFolder
 import persistence.FileIO
 import persistence.LocalWindowState
 import androidx.compose.ui.unit.dp
 import business.Sync
-import database.UserFile
 import presentation.*
 import presentation.markdown.MarkdownRenderers
 
@@ -90,7 +87,8 @@ fun FrameWindowScope.MenuItems(
     calendarView: MutableState<Boolean>,
     userSettings: MutableState<Boolean>,
     folders: MutableState<ArrayList<NoteFolder>>,
-    ) {
+    colorSelection: MutableState<Int>,
+) {
     val alertUser = remember { mutableStateOf<Boolean>(false) };
 
     if (alertUser.value) {
@@ -148,6 +146,15 @@ fun FrameWindowScope.MenuItems(
                 calendarView.value = false
                 userSettings.value = !(userSettings.value)
             })
+            Item("Green Color Theme", onClick = {
+                colorSelection.value = 0
+            })
+            Item("Red Color Theme", onClick = {
+                colorSelection.value = 1
+            })
+            Item("Blue Color Theme", onClick = {
+                colorSelection.value = 2
+            })
         }
         Menu("Sync") {
             Item("Upload files to cloud", onClick = {
@@ -170,16 +177,28 @@ fun FrameWindowScope.MenuItems(
 
 fun main() = application {
     val currentWindow = LocalWindowState()
+    val colorSelection = remember { mutableStateOf(currentWindow.colorTheme) }
     Window(
         onCloseRequest = {
-            currentWindow.saveState()
+            currentWindow.saveState(colorSelection)
             exitApplication()
         },
         title = "NoteDown",
         state = currentWindow.state,
         icon = painterResource("icon.png")
     ) {
-        MaterialTheme(colors = MaterialTheme.colors.copy(primary = Color(90, 180, 90))) {
+        var colorTheme: Colors;
+        if (colorSelection.value == 0) {
+            colorTheme = MaterialTheme.colors.copy(primary = Color(90, 180, 90))
+        } else if (colorSelection.value == 1) {
+            colorTheme = MaterialTheme.colors.copy(primary = Color(90, 0, 0))
+        } else if (colorSelection.value == 2) {
+            colorTheme = MaterialTheme.colors.copy(primary = Color(0, 0, 90))
+        } else {
+            colorTheme = MaterialTheme.colors.copy(primary = Color(90, 180, 90))
+        }
+        
+        MaterialTheme(colors = colorTheme) {
             // To-do: shouldn't pass the props around and down the children.
             // figure out a way to use redux like store
             val userSettings = remember { mutableStateOf<Boolean>(false) };
@@ -188,7 +207,7 @@ fun main() = application {
             val selectedFolder = remember { mutableStateOf<NoteFolder?>(null) }
             val selectedFile = remember { mutableStateOf<NoteFile?>(null) }
             val folders = remember { mutableStateOf<ArrayList<NoteFolder>>(FileIO.readNotesFolder()) }
-            MenuItems(textState, selectedFile.value, calendarView, userSettings, folders)
+            MenuItems(textState, selectedFile.value, calendarView, userSettings, folders, colorSelection)
             App(textState, selectedFolder, selectedFile, calendarView, userSettings, folders)
         }
     }

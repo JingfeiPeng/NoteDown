@@ -3,6 +3,7 @@ package presentation
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.*
@@ -124,13 +125,22 @@ fun DocumentSelectionArea(
                 }
 
                 Spacer(modifier = Modifier.weight(1.0f))
+                Row(modifier = Modifier.padding(1.dp)) {
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(0.5f).padding(0.5.dp),
+                        onClick = {
+                            newFolderText = ""
+                            focusFolder = true
+                        }) {
+                        Text("+")
+                    }
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(1f).padding(0.5.dp),
+                        onClick = {
 
-                Button(modifier = Modifier.fillMaxWidth().padding(7.dp),
-                    onClick = {
-                        newFolderText = ""
-                        focusFolder = true
-                    }) {
-                    Text("+ Section")
+                        }) {
+                        Text("-")
+                    }
                 }
             }
         }
@@ -191,12 +201,24 @@ fun DocumentSelectionArea(
 
                     Spacer(modifier = Modifier.weight(1.0f))
 
-                    Button(modifier = Modifier.fillMaxWidth().padding(8.dp),
-                        onClick = {
-                            newFileText = ""
-                            focusFile = true
-                        }) {
-                        Text("+ File")
+
+                    Row(modifier = Modifier.padding(1.dp)) {
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(0.5f).padding(0.5.dp),
+
+                            onClick = {
+                                newFileText = ""
+                                focusFile = true
+                            }) {
+                            Text("+")
+                        }
+                        OutlinedButton(
+                            modifier = Modifier.fillMaxWidth(1f).padding(0.5.dp),
+                            onClick = {
+
+                            }) {
+                            Text("-")
+                        }
                     }
                 }
             }
