@@ -30,8 +30,8 @@ fun DocumentEditingArea(
     ) {
     val commandMap = mapOf(
         Key.B to TextCommand(textState, "**"),
-        Key.D to TextCommand(textState, "*"),
-        Key.F to TextCommand(textState, "<u>", "</u>"),
+        Key.I to TextCommand(textState, "*"),
+        Key.U to TextCommand(textState, "<u>", "</u>"),
         Key.S to TextCommand(textState, "~~"),
         Key.W to TextCommand(textState, "\n```\n"),
     )
