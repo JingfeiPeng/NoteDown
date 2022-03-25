@@ -49,7 +49,7 @@ fun App(
     } else {
         BoxWithConstraints {
             Column {
-                TopBar(textState)
+                TopBar(textState, calendarView, userSettings)
                 MainArea(textState, selectedFolder, selectedFile, folders)
             }
         }

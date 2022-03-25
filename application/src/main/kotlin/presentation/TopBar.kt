@@ -3,6 +3,8 @@ package presentation
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -98,9 +100,11 @@ fun TextCustomizationMenu(textState: MutableState<TextFieldValue>) {
     )
 
     Box(modifier = Modifier.fillMaxWidth(0.20f)) {
-        Text(
-            text = "Text Customization Menu",
-            style = MaterialTheme.typography.body1
+        Divider(
+            color = Color.Gray,
+            modifier = Modifier
+                .fillMaxHeight(0.8f)
+                .width(1.dp)
         )
     }
     CustomizationButton(onClick = { commandMap["B"]!!.runCommand() }) {
@@ -115,12 +119,7 @@ fun TextCustomizationMenu(textState: MutableState<TextFieldValue>) {
     CustomizationButton(onClick = { commandMap["S"]!!.runCommand() }) {
         Text("S", style = TextStyle(textDecoration = TextDecoration.LineThrough))
     }
-    Divider(
-        color = Color.Gray,
-        modifier = Modifier
-            .fillMaxHeight(0.8f)
-            .width(1.dp)
-    )
+
     codeBlockButton(textState)
 }
 
@@ -146,10 +145,28 @@ fun InsertImage(textState: MutableState<TextFieldValue>) {
 }
 
 @Composable
-fun TopBar(textState: MutableState<TextFieldValue>) {
+fun TopBar(
+    textState: MutableState<TextFieldValue>,
+    calendarView: MutableState<Boolean>,
+    userSettings: MutableState<Boolean>
+) {
     TopAppBar(
         title = {
             Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                Button(
+                    onClick = {
+                        userSettings.value = !userSettings.value
+                    }
+                ) {
+                    Icon(Icons.Filled.AccountCircle, "User Settings")
+                }
+                Button(
+                    onClick = {
+                        calendarView.value = !calendarView.value
+                    }
+                ) {
+                    Icon(Icons.Filled.DateRange, "Calendar")
+                }
                 TextCustomizationMenu(textState)
                 InsertImage(textState)
             }
