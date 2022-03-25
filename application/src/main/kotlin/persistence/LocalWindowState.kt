@@ -7,30 +7,41 @@ import androidx.compose.ui.window.WindowState
 import java.io.File
 
 class LocalWindowState {
-    val savedReference = ".windowstate"
+    private val savedReferenceFolder = System.getProperty("user.home") + "/NotesTaker"
+    private val savedReference = ".windowstate"
+
     val state: WindowState;
 
     constructor() {
+        println(savedReference)
         this.state = loadWindowState();
     }
 
+    private fun isWindowStateStored(): Boolean {
+        return File(this.savedReferenceFolder, this.savedReference).exists()
+    }
+
     private fun loadWindowState(): WindowState {
-        val storage: String = File(savedReference).readText(Charsets.UTF_8)
-        if (storage != null && storage.isNotEmpty() && storage.split(", ").size == 5) {
-            val width: Float = storage.split(", ")[0].toFloat()
-            val height: Float = storage.split(", ")[1].toFloat()
-            val xpos: Float = storage.split(", ")[2].toFloat()
-            val ypos: Float = storage.split(", ")[3].toFloat()
-            val minimize: Boolean = storage.split(", ")[4].toBoolean()
-            return WindowState(size=(DpSize(Dp(width), Dp(height))),
-                position = WindowPosition(Dp(xpos), Dp(ypos)),
-                isMinimized = minimize);
+        if (this.isWindowStateStored()) {
+            val storage: String = File(this.savedReferenceFolder, this.savedReference).readText(Charsets.UTF_8)
+            if (storage != null && storage.isNotEmpty() && storage.split(", ").size == 5) {
+                val width: Float = storage.split(", ")[0].toFloat()
+                val height: Float = storage.split(", ")[1].toFloat()
+                val xpos: Float = storage.split(", ")[2].toFloat()
+                val ypos: Float = storage.split(", ")[3].toFloat()
+                val minimize: Boolean = storage.split(", ")[4].toBoolean()
+                return WindowState(
+                    size = (DpSize(Dp(width), Dp(height))),
+                    position = WindowPosition(Dp(xpos), Dp(ypos)),
+                    isMinimized = minimize
+                );
+            }
         }
         return WindowState()
     }
 
     fun saveState() {
-        File(".windowstate").writeText(
+        File(this.savedReferenceFolder, this.savedReference).writeText(
             this.state.size.width.value.toString()
                 + ", " + this.state.size.height.value.toString()
                 + ", " + this.state.position.x.value.toString()
