@@ -6,7 +6,8 @@ import kotlin.streams.asSequence
 
 class User {
     var userId: String = ""
-    private var storage: String = "user.txt"
+    private val savedReferenceFolder = System.getProperty("user.home") + "/NotesTaker"
+    private val savedReference = ".user"
     val STRING_LENGTH: Int = 8
     private val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
@@ -31,15 +32,15 @@ class User {
     }
 
     private fun isUserStored(): Boolean {
-        return File(this.storage).exists()
+        return File(this.savedReferenceFolder, this.savedReference).exists()
     }
 
     fun storedUserId(text: String) {
-        File(this.storage).writeText(text)
+        File(this.savedReferenceFolder, this.savedReference).writeText(text)
     }
 
     private fun loadUserId(): String {
-        return File(this.storage).readText(Charsets.UTF_8)
+        return File(this.savedReferenceFolder, this.savedReference).readText(Charsets.UTF_8)
     }
 
 }
