@@ -85,6 +85,9 @@ fun DocumentSelectionArea(
                                 selectedFolder.value = it
                                 it.children.firstOrNull()?.let { file ->
                                     updateSelectedFile(selectedFile, textState, file)
+                                } ?: run {
+                                    selectedFile.value = null
+                                    textState.value = TextFieldValue()
                                 }
                             }
                         }, colors = colour) {
@@ -98,9 +101,18 @@ fun DocumentSelectionArea(
                         modifier = Modifier.focusRequester(newFolderFocusRequester).onKeyEvent { keyEvent ->
                             if (keyEvent.key.keyCode == Key.Enter.keyCode) {
                                 selectedFolder.value = FileIO.makeFolder(it)
+                                textState.value = TextFieldValue()
+                                selectedFile.value = null
                                 newFolderText = null
                             }
                             true
+                        }.onFocusChanged { focusState ->
+                            if (!focusState.isFocused && it.isNotEmpty()) {
+                                selectedFolder.value = FileIO.makeFolder(it)
+                                textState.value = TextFieldValue()
+                                selectedFile.value = null
+                                newFolderText = null
+                            }
                         },
                         value = it,
                         singleLine = true,
@@ -159,6 +171,14 @@ fun DocumentSelectionArea(
                                     newFileText = null
                                 }
                                 true
+                            }.onFocusChanged { focusState ->
+                                if (!focusState.isFocused && it.isNotEmpty()) {
+                                    val dir = selectedFolder.value
+                                    if (dir != null) {
+                                        createFile(selectedFolder, selectedFile, textState, dir, it)
+                                        newFileText = null
+                                    }
+                                }
                             },
                             value = it,
                             singleLine = true,
