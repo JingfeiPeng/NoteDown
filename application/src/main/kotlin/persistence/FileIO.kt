@@ -39,6 +39,7 @@ class FileIO {
 
         fun deleteFile(file: NoteFile) {
             file.file.delete()
+            File(file.file.absolutePath.split(".md")[0]+".json").delete()
         }
 
         fun deleteFolder(folder: NoteFolder) {
