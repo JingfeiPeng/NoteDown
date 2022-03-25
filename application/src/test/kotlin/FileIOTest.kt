@@ -3,13 +3,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import data.NoteFile
 import data.NoteFolder
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.TestInstance
 import persistence.FileIO
 import java.io.File
 
-import org.mockito.Mock;
 import kotlin.test.*
 
 
@@ -117,6 +114,39 @@ internal class FileIOTest {
         fileNode.file.delete()
         File(testingFolder, "$name.json").delete()
         testingFolder.delete()
+    }
+
+    @Test
+    fun testDeleteFolder() {
+        // Arrange
+        val name = "IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiudgkfngfkndngk"
+        val folderNode = FileIO.makeFolder(name)
+        val (_, fileNode) = FileIO.makeFile(folderNode!!, "gfdkjngdfnk")
+
+        // Act
+        FileIO.deleteFolder(folderNode)
+
+        // Assert
+        assert(!fileNode!!.file.exists())
+        assert(!folderNode.file.exists())
+    }
+
+    @Test
+    fun testDeleteFile() {
+        // Arrange
+        val name = "IMPOSSIBLE_RANDOMFOLDER_AJSNdioasidasbiudgkfngfkndngk"
+        val folderNode = FileIO.makeFolder(name)
+        val (_, fileNode) = FileIO.makeFile(folderNode!!, "gfdkjngdfnk")
+
+        // Act
+        FileIO.deleteFile(fileNode!!)
+
+        // Assert
+        assert(!fileNode.file.exists())
+        assert(folderNode.file.exists())
+
+        // Cleanup
+        folderNode.file.delete()
     }
 
     @AfterEach

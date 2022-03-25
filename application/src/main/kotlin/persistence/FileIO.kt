@@ -37,6 +37,14 @@ class FileIO {
             return readNotesFolder().find { it.name == name }
         }
 
+        fun deleteFile(folder: NoteFile) {
+            folder.file.delete()
+        }
+
+        fun deleteFolder(folder: NoteFolder) {
+            folder.file.deleteRecursively()
+        }
+
         fun makeFile(dir: NoteFolder, name: String): Pair<NoteFolder?, NoteFile?> {
             if (name == "") {
                 return Pair(null, null)
