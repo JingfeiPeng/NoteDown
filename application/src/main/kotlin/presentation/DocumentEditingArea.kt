@@ -17,6 +17,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.input.TextFieldValue
 import business.TextCustomization
+import business.command.TextCommand
 import data.NoteFile
 import persistence.FileIO
 
@@ -27,6 +28,14 @@ fun DocumentEditingArea(
     textState: MutableState<TextFieldValue>,
     selectedFile: MutableState<NoteFile?>,
     ) {
+    val commandMap = mapOf(
+        Key.B to TextCommand(textState, "**"),
+        Key.D to TextCommand(textState, "*"),
+        Key.F to TextCommand(textState, "<u>", "</u>"),
+        Key.S to TextCommand(textState, "~~"),
+        Key.W to TextCommand(textState, "\n```\n"),
+    )
+
     Column {
         if (selectedFile.value == null) {
             Text("Create a section and note to start editing",
@@ -36,30 +45,8 @@ fun DocumentEditingArea(
         Box(
             Modifier
                 .onKeyEvent {
-                    if (it.isMetaPressed) {
-                        when (it.key) {
-                            Key.B -> {
-                                TextCustomization.appendAroundSelected(textState, "**")
-                                true
-                            }
-                            Key.D -> {
-                                TextCustomization.appendAroundSelected(textState, "*")
-                                true
-                            }
-                            Key.F -> {
-                                TextCustomization.appendAroundSelected(textState, "<u>", "</u>")
-                                true
-                            }
-                            Key.S -> {
-                                TextCustomization.appendAroundSelected(textState, "~")
-                                true
-                            }
-                            Key.W -> {
-                                TextCustomization.appendAroundSelected(textState, "\n```\n")
-                                true
-                            }
-                        }
-                        false
+                    if (it.type == KeyEventType.KeyUp && (it.isMetaPressed || it.isCtrlPressed)) {
+                        commandMap[it.key]?.runCommand() ?: false
                     }
                     else {
                         // let other handlers receive this event
