@@ -102,18 +102,22 @@ fun DocumentSelectionArea(
                     TextField(
                         modifier = Modifier.focusRequester(newFolderFocusRequester).onKeyEvent { keyEvent ->
                             if (keyEvent.key.keyCode == Key.Enter.keyCode) {
-                                selectedFolder.value = FileIO.makeFolder(it)
+                                val newFolder = FileIO.makeFolder(it)
                                 textState.value = TextFieldValue()
                                 selectedFile.value = null
                                 newFolderText = null
+                                foldersState.value = FileIO.readNotesFolder()
+                                selectedFolder.value = foldersState.value.find { f -> f.name == newFolder!!.name }
                             }
                             true
                         }.onFocusChanged { focusState ->
                             if (!focusState.isFocused && it.isNotEmpty()) {
-                                selectedFolder.value = FileIO.makeFolder(it)
+                                val newFolder = FileIO.makeFolder(it)
                                 textState.value = TextFieldValue()
                                 selectedFile.value = null
                                 newFolderText = null
+                                foldersState.value = FileIO.readNotesFolder()
+                                selectedFolder.value = foldersState.value.find { f -> f.name == newFolder!!.name }
                             }
                         },
                         value = it,
@@ -136,8 +140,22 @@ fun DocumentSelectionArea(
                     }
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(1f).padding(0.5.dp),
+                        enabled = selectedFolder.value != null,
                         onClick = {
-
+                            selectedFolder.value?.run(FileIO::deleteFolder)
+                            if (folders.size == 1) {
+                                textState.value = TextFieldValue()
+                                selectedFile.value = null
+                                selectedFolder.value = null
+                                foldersState.value = FileIO.readNotesFolder()
+                            } else {
+                                val idx = folders.indexOf(selectedFolder.value)
+                                val newIdx = if (idx == folders.size - 1) idx - 1 else idx
+                                textState.value = TextFieldValue()
+                                selectedFile.value = null
+                                foldersState.value = FileIO.readNotesFolder()
+                                selectedFolder.value = foldersState.value[newIdx]
+                            }
                         }) {
                         Text("-")
                     }
@@ -180,6 +198,10 @@ fun DocumentSelectionArea(
                                 if (keyEvent.key.keyCode == Key.Enter.keyCode && dir != null) {
                                     createFile(selectedFolder, selectedFile, textState, dir, it)
                                     newFileText = null
+                                    foldersState.value = FileIO.readNotesFolder()
+                                    selectedFolder.value = foldersState.value.find { it.name == selectedFolder.value!!.name }
+                                    selectedFile.value = selectedFolder.value!!.children.find { it.name == selectedFile.value!!.name }
+
                                 }
                                 true
                             }.onFocusChanged { focusState ->
@@ -188,6 +210,9 @@ fun DocumentSelectionArea(
                                     if (dir != null) {
                                         createFile(selectedFolder, selectedFile, textState, dir, it)
                                         newFileText = null
+                                        foldersState.value = FileIO.readNotesFolder()
+                                        selectedFolder.value = foldersState.value.find { it.name == selectedFolder.value!!.name }
+                                        selectedFile.value = selectedFolder.value!!.children.find { it.name == selectedFile.value!!.name }
                                     }
                                 }
                             },
@@ -214,8 +239,21 @@ fun DocumentSelectionArea(
                         }
                         OutlinedButton(
                             modifier = Modifier.fillMaxWidth(1f).padding(0.5.dp),
+                            enabled = selectedFile.value != null,
                             onClick = {
-
+                                selectedFile.value?.run(FileIO::deleteFile)
+                                if (it.children.size == 1) {
+                                    textState.value = TextFieldValue()
+                                    selectedFile.value = null
+                                } else {
+                                    val idx = it.children.indexOf(selectedFile.value)
+                                    val newIdx = if (idx == it.children.size - 1) idx - 1 else idx + 1
+                                    val newFile = it.children[newIdx]
+                                    updateSelectedFile(selectedFile, textState, newFile)
+                                }
+                                foldersState.value = FileIO.readNotesFolder()
+                                selectedFolder.value = foldersState.value.find { folder -> folder.name == it.name }
+                                selectedFile.value = selectedFolder.value!!.children.find { it.name == selectedFile.value!!.name }
                             }) {
                             Text("-")
                         }
