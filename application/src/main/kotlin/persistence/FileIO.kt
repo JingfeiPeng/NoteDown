@@ -113,7 +113,7 @@ class FileIO {
                 val metaPath = file.fileName.split(".")[0]+".json"
                 val metaFile = File("$notesFolder/${file.folderName}/$metaPath")
                 val metaData = Document(
-                    file.fileName.split(".")[0],
+                    file.folderName+"/"+file.fileName.split(".")[0],
                     Date(file.createdOn),
                 )
                 metaFile.writeText(Json.encodeToString(metaData))
