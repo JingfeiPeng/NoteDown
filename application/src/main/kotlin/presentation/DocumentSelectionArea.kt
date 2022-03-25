@@ -49,8 +49,9 @@ fun DocumentSelectionArea(
     selectedFolder: MutableState<NoteFolder?>,
     selectedFile: MutableState<NoteFile?>,
     textState: MutableState<TextFieldValue>,
+    foldersState: MutableState<ArrayList<NoteFolder>>,
 ) {
-    val folders = FileIO.readNotesFolder();
+    val folders = foldersState.value
 
     val newFolderFocusRequester = remember { FocusRequester() }
     val newFileFocusRequester = remember { FocusRequester() }
