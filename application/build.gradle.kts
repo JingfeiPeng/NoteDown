@@ -50,6 +50,20 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "NoteDown"
             packageVersion = "1.0.0"
+
+            val resources = File(project.sourceSets["main"].resources.sourceDirectories.asPath)
+
+            macOS {
+                iconFile.set(resources.resolve("icon.icns"))
+            }
+            windows {
+                iconFile.set(resources.resolve("icon.ico"))
+                menuGroup = "NoteDown"
+                shortcut = true
+            }
+            linux {
+                iconFile.set(resources.resolve("icon.png"))
+            }
         }
     }
 }
