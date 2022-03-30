@@ -17,7 +17,7 @@ fun ImageDialog(
         object : FileDialog(parent, "Choose a file", LOAD) {
             init {
                 // only choose image files
-                setFile("*.jpg;*.jpeg")
+                setFile("*.jpg;*.jpeg;*.png")
             }
             override fun setVisible(value: Boolean) {
                 super.setVisible(value)
