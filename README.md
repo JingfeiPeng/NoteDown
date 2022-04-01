@@ -12,6 +12,11 @@ This repo contains the application and backend for a markdown note-taking app. T
 
 Team: Ryan Larkin, Jing Fei Peng, Aarsh Patel (Team 109)
 
+### Releases
+
+- [Sprint 3](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-3) (see also [CHANGELOG.md](CHANGELOG.md))
+- [Sprint 2](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-2)
+- [Sprint 1](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-1)
 
 ### Link to other Wiki pages
 * [Requirements page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Requirements)
