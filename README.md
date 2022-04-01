@@ -39,14 +39,14 @@ https://coda.io/d/CS398_dmnaoF3a4T2
 
 Editor screen
 
-![theme](uploads/13f06ecb95890b1ae1864002083d39aa/theme.png)
+<img src="theme.png">
 
-![main_UI_screenshot](uploads/3a1b4edf1f166fa868651a2595db90ea/main_UI_screenshot.png)
+<img src="mainUI.png">
 
 
 Calendar screen where user can click open notes based on the date the note was created
 
-![calendar_UI_screenshot](uploads/a3228e0ced1e8194edea04b26ccbe03b/calendar_UI_screenshot.png)
+<img src="calendarUI.png">
 
 
 ### Acknowledgement of third party libraries
@@ -62,7 +62,7 @@ By default, we create a NoteTaker folder in the user's directory to save the use
 
 To change themes go to `User Settings` dropdown (on the top left) and select between three themes green, red, and blue.
 
-![change_themes](uploads/168a77ae1662b9d87edb6a7ef78ad509/change_themes.png)
+<img src="changeThemes.png">
 
 #### Sync
 
