@@ -1,6 +1,15 @@
 # CS398
 
-This repo contains the application and backend for a note taking app built as CS398 project
+This repo contains the application and backend for a markdown note taking app. The app
+targets Software developing students. Besides from creating folders and notes edit, the key featrues of
+the app are as follows:
+* calendar view and open file from calendar
+* insert image and display in markdown
+* markdown display and text customization (bold, italic, underline, strike through)
+* Different Code block syntax highlighting in markdown
+* Multi-theme support
+* Data stored both locally and remotely, and kept in sync. Will work offline.
+* Multi-platform support, Windows and MacOS
 
 
 ### Team members
