@@ -13,7 +13,7 @@ the app are as follows:
 
 ### Releases
 
-- [Sprint 3](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-3)
+- [Sprint 3](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-3) (see also [CHANGELOG.md](CHANGELOG.md))
 - [Sprint 2](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-2)
 - [Sprint 1](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-1)
 
