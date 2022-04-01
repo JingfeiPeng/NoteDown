@@ -11,6 +11,11 @@ the app are as follows:
 * Data stored both locally and remotely, and kept in sync. Will work offline.
 * Multi-platform support, Windows and MacOS
 
+### Releases
+
+- [Sprint 3](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-3)
+- [Sprint 2](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-2)
+- [Sprint 1](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-1)
 
 ### Team members
 
