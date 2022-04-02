@@ -56,7 +56,7 @@ We used Jetpack Compose as our frontend framework, and Mikepenz's multi-platform
 
 ### Application Usage
 
-By default, we create a NoteTaker folder in the user's directory to save the user's notes.
+By default, we create a NoteTaker folder in the user's directory to save the user's notes. See the "userInstructionGuide.mp4" for a full user instruction guide. The key features are explained below:
 
 #### Color theme
 
