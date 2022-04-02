@@ -18,7 +18,8 @@ Team: Ryan Larkin, Jing Fei Peng, Aarsh Patel (Team 109)
 - [Sprint 2](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-2)
 - [Sprint 1](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-1)
 
-### Link to other Wiki pages
+### Link to Wiki pages
+* [Main Wiki page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/home)
 * [Requirements page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Requirements)
 * [Architecture & Design](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Analysis-&-Design)
 * [Implementation](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Implementation)
