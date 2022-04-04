@@ -20,10 +20,12 @@ Team: Ryan Larkin, Jing Fei Peng, Aarsh Patel (Team 109)
 
 ### Link to Wiki pages
 * [Main Wiki page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/home)
+* [Introduction](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Introduction)
 * [Requirements page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Requirements)
 * [Architecture & Design](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Analysis-&-Design)
 * [Implementation](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Implementation)
 * [Testing](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Testing)
+* [Installer Overview](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Installer-Overview)
 
 ### Releases
 
@@ -80,3 +82,8 @@ Windows/Mac:
 - Underline: Ctrl + U / CMD + U
 - Strikethrough: Ctrl + S / CMD + S
 - Code block: Ctrl + W / CMD + W
+
+
+#### Installer Overview
+
+There is also a page detailing how to use CI to build installers for Linux, as well as customizing the installers. This can be found on the [Installer Overview page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Installer-Overview).
