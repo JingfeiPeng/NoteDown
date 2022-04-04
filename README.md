@@ -18,6 +18,10 @@ Team: Ryan Larkin, Jing Fei Peng, Aarsh Patel (Team 109)
 - [Sprint 2](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-2)
 - [Sprint 1](https://git.uwaterloo.ca/jf2peng/cs398/-/releases/sprint-1)
 
+### License
+
+This project is under the MIT license. See [LICENSE](https://git.uwaterloo.ca/jf2peng/cs398/-/blob/master/LICENSE).
+
 ### Link to Wiki pages
 * [Main Wiki page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/home)
 * [Introduction](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Introduction)
