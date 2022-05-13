@@ -23,13 +23,13 @@ Team: Ryan Larkin, Jing Fei Peng, Aarsh Patel (Team 109)
 This project is under the MIT license. See [LICENSE](https://git.uwaterloo.ca/jf2peng/cs398/-/blob/master/LICENSE).
 
 ### Link to Wiki pages
-* [Main Wiki page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/home)
-* [Introduction](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Introduction)
-* [Requirements page](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Requirements)
-* [Architecture & Design](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Analysis-&-Design)
-* [Implementation](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Implementation)
-* [Testing](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Testing)
-* [Installer Overview](https://git.uwaterloo.ca/jf2peng/cs398/-/wikis/Installer-Overview)
+* [Main Wiki page](https://github.com/JingfeiPeng/NoteDown/wiki)
+* [Introduction](https://github.com/JingfeiPeng/NoteDown/wiki/Introduction)
+* [Features Description](https://github.com/JingfeiPeng/NoteDown/wiki/Features)
+* [Architecture & Design](https://github.com/JingfeiPeng/NoteDown/wiki/Analysis-&-Design)
+* [Implementation](https://github.com/JingfeiPeng/NoteDown/wiki/Implementation)
+* [Testing](https://github.com/JingfeiPeng/NoteDown/wiki/Testing)
+* [Installer Overview](https://github.com/JingfeiPeng/NoteDown/wiki/Installer-Overview)
 
 ### Releases
 
